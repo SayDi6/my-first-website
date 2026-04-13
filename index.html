@@ -23,15 +23,38 @@
             font-size: 18px;
             margin: 10px;
         }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: yellow;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: orange;
+        }
     </style>
 </head>
 
 <body>
 
+    <button onclick="showMessage()">Click Me</button>
+
+    <p id="message"></p>
+
     <h1>Hello I'm Sayan 👋</h1>
     <h2>I am becoming a web developer 🚀</h2>
     <p>I can be king kong banging on my chest</p>
     <p>I can beat the world, I can beat the war.</p>
+
+    <script>
+        function showMessage() {
+            document.getElementById("message").innerText = "I will become unstoppable 💪";
+        }
+    </script>
 
 </body>
 </html>
