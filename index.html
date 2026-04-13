@@ -5,19 +5,20 @@
 
     <style>
         body {
-            background-color: rgb(100, 71, 71);
-            color: rgb(54, 7, 7);
+            background-color: #3e2c2c;
+            color: white;
             text-align: center;
             margin-top: 100px;
+            font-family: Arial, sans-serif;
         }
 
         h1 {
-            color: rgb(0, 17, 255);
+            color: yellow;
             animation: glow 2s infinite alternate;
         }
 
         h2 {
-            color: rgb(164, 217, 235);
+            color: lightblue;
         }
 
         p {
@@ -47,6 +48,26 @@
             background: linear-gradient(45deg, orange, red);
         }
 
+        /* CENTER TABLE */
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 300px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid white;
+        }
+
+        th {
+            color: yellow;
+        }
+
+        tr:hover {
+            background-color: #5a3d3d;
+        }
+
         @keyframes glow {
             from {
                 text-shadow: 0 0 10px yellow;
@@ -66,37 +87,47 @@
 
     <h1>Hello I'm Sayan 👋</h1>
     <h2>I am becoming a web developer 🚀</h2>
-    <p>I can be king kong banging on my chest</p>
     <p>I can beat the world, I can beat the war.</p>
 
-     <h2>About Me</h2>
-     <p>I am learning web development and building my future step by step.</p>
+    <h2>About Me</h2>
+    <p>I am learning web development and building my future step by step.</p>
 
-     <h2>My Skills</h2>
-     <p>Python, HTML, CSS (learning)</p>
-     <h2>Crypto Prices</h2>
+    <h2>My Skills</h2>
+    <p>Python, HTML, CSS (learning)</p>
 
-     <table border="1">
-     <tr>
-    <th>Name</th>
-    <th>Price</th>
-</tr>
+    <h2>Crypto Prices</h2>
 
-<tr>
-    <td>Bitcoin</td>
-    <td>$70000</td>
-</tr>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
 
-<tr>
-    <td>Ethereum</td>
-    <td>$2000</td>
-</tr>
-</table>
+        <tr>
+            <td>Bitcoin</td>
+            <td id="btc">Loading...</td>
+        </tr>
+
+        <tr>
+            <td>Ethereum</td>
+            <td id="eth">Loading...</td>
+        </tr>
+    </table>
 
     <script>
         function showMessage() {
             document.getElementById("message").innerText = "I will become unstoppable 💪";
         }
+
+        async function getPrices() {
+            let response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd");
+            let data = await response.json();
+
+            document.getElementById("btc").innerText = "$" + data.bitcoin.usd;
+            document.getElementById("eth").innerText = "$" + data.ethereum.usd;
+        }
+
+        getPrices();
     </script>
 
 </body>
