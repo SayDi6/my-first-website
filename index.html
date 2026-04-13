@@ -13,6 +13,7 @@
 
         h1 {
             color: yellow;
+            animation: glow 2s infinite alternate;
         }
 
         h2 {
@@ -24,17 +25,35 @@
             margin: 10px;
         }
 
+        #message {
+            margin: 20px;
+            font-size: 20px;
+            color: lightgreen;
+        }
+
         button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 16px;
-            background-color: yellow;
+            background: linear-gradient(45deg, yellow, orange);
             border: none;
+            border-radius: 8px;
             cursor: pointer;
             margin-bottom: 20px;
+            transition: 0.3s;
         }
 
         button:hover {
-            background-color: orange;
+            transform: scale(1.1);
+            background: linear-gradient(45deg, orange, red);
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px yellow;
+            }
+            to {
+                text-shadow: 0 0 25px orange;
+            }
         }
     </style>
 </head>
