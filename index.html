@@ -114,21 +114,29 @@
         </tr>
     </table>
 
-    <script>
-        function showMessage() {
-            document.getElementById("message").innerText = "I will become unstoppable 💪";
-        }
+<script>
+function showMessage() {
+    document.getElementById("message").innerText = "I will become unstoppable 💪";
+}
 
-        async function getPrices() {
-            let response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd");
-            let data = await response.json();
+async function getPrices() {
+    try {
+       let response = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT");
 
-            document.getElementById("btc").innerText = "$" + data.bitcoin.usd;
-            document.getElementById("eth").innerText = "$" + data.ethereum.usd;
-        }
+        let data = await response.json();
 
-        getPrices();
-    </script>
+        document.getElementById("btc").innerText = "$" + data.bitcoin.usd;
+        document.getElementById("eth").innerText = "$" + data.ethereum.usd;
+
+    } catch (error) {
+        document.getElementById("btc").innerText = "Error";
+        document.getElementById("eth").innerText = "Error";
+        console.log(error);
+    }
+}
+
+getPrices();
+</script>
 
 </body>
 </html>
