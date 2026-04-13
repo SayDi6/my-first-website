@@ -1,123 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sayan | Portfolio</title>
+    <title>My First Page</title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: Arial, sans-serif;
-            background: #0d0d0d;
-            color: #ffffff;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 60px auto;
-            padding: 20px;
-        }
-
-        .card {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 30px;
+            background-color: black;
+            color: white;
             text-align: center;
+            margin-top: 100px;
         }
 
         h1 {
-            font-size: 2.5rem;
-            color: #ffd700;
-            margin-bottom: 10px;
+            color: yellow;
+            animation: glow 2s infinite alternate;
         }
 
         h2 {
-            color: #66ccff;
-            margin-top: 30px;
-            margin-bottom: 10px;
+            color: lightblue;
         }
 
         p {
-            color: #ccc;
-            line-height: 1.6;
+            font-size: 18px;
+            margin: 10px;
         }
 
-        .btn {
-            margin-top: 20px;
+        #message {
+            margin: 20px;
+            font-size: 20px;
+            color: lightgreen;
+        }
+
+        button {
             padding: 12px 25px;
-            background: linear-gradient(45deg, #ffd700, #ff8800);
+            font-size: 16px;
+            background: linear-gradient(45deg, yellow, orange);
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            margin-bottom: 20px;
             transition: 0.3s;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            background: linear-gradient(45deg, #ff8800, #ff3300);
+        button:hover {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, orange, red);
         }
 
-        .message {
-            margin-top: 15px;
-            color: #00ff99;
-        }
-
-        .skills {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .skill {
-            padding: 8px 15px;
-            border: 1px solid #444;
-            border-radius: 6px;
-            background: #1a1a1a;
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px yellow;
+            }
+            to {
+                text-shadow: 0 0 25px orange;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="container">
-    <div class="card">
+    <button onclick="showMessage()">Click Me</button>
 
-        <h1>Hello, I'm Sayan 👋</h1>
-        <p>Aspiring Web Developer 🚀</p>
+    <p id="message"></p>
 
-        <button class="btn" onclick="showMessage()">Click Me</button>
-        <p id="msg" class="message"></p>
+    <h1>Hello I'm Sayan 👋</h1>
+    <h2>I am becoming a web developer 🚀</h2>
+    <p>I can be king kong banging on my chest</p>
+    <p>I can beat the world, I can beat the war.</p>
 
-        <h2>About Me</h2>
-        <p>
-            I am focused on becoming a skilled web developer by building real projects daily 
-            and improving my problem-solving ability.
-        </p>
+     <h2>About Me</h2>
+     <p>I am learning web development and building my future step by step.</p>
 
-        <h2>Skills</h2>
-        <div class="skills">
-            <div class="skill">Python</div>
-            <div class="skill">HTML</div>
-            <div class="skill">CSS</div>
-        </div>
+     <h2>My Skills</h2>
+     <p>Python, HTML, CSS (learning)</p>
 
-    </div>
-</div>
-
-<script>
-function showMessage() {
-    document.getElementById("msg").innerText = "This is just the beginning 💪";
-}
-</script>
+    <script>
+        function showMessage() {
+            document.getElementById("message").innerText = "I will become unstoppable 💪";
+        }
+    </script>
 
 </body>
 </html>
