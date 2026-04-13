@@ -121,12 +121,16 @@ function showMessage() {
 
 async function getPrices() {
     try {
-       let response = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT");
+        // Bitcoin
+        let btcRes = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT");
+        let btcData = await btcRes.json();
 
-        let data = await response.json();
+        // Ethereum
+        let ethRes = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT");
+        let ethData = await ethRes.json();
 
-        document.getElementById("btc").innerText = "$" + data.bitcoin.usd;
-        document.getElementById("eth").innerText = "$" + data.ethereum.usd;
+        document.getElementById("btc").innerText = "$" + parseFloat(btcData.price).toFixed(2);
+        document.getElementById("eth").innerText = "$" + parseFloat(ethData.price).toFixed(2);
 
     } catch (error) {
         document.getElementById("btc").innerText = "Error";
