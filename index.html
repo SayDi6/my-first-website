@@ -115,8 +115,8 @@
     </table>
 
 <script>
-let prevBTC = 0;
-let prevETH = 0;
+let prevBTC = null;
+let prevETH = null;
 
 function showMessage() {
     document.getElementById("message").innerText = "I will become unstoppable 💪";
@@ -137,38 +137,39 @@ async function getPrices() {
         let ethElement = document.getElementById("eth");
 
         // BTC color logic
-        if (btcPrice > prevBTC) {
-            btcElement.style.color = "lightgreen";
-        } else if (btcPrice < prevBTC) {
-            btcElement.style.color = "red";
+        if (prevBTC !== null) {
+            if (btcPrice > prevBTC) {
+                btcElement.style.color = "lightgreen";
+            } else if (btcPrice < prevBTC) {
+                btcElement.style.color = "red";
+            }
         }
 
         // ETH color logic
-        if (ethPrice > prevETH) {
-            ethElement.style.color = "lightgreen";
-        } else if (ethPrice < prevETH) {
-            ethElement.style.color = "red";
+        if (prevETH !== null) {
+            if (ethPrice > prevETH) {
+                ethElement.style.color = "lightgreen";
+            } else if (ethPrice < prevETH) {
+                ethElement.style.color = "red";
+            }
         }
 
-let btcArrow = "";
+        // BTC arrow
+        let btcArrow = "";
+        if (prevBTC !== null) {
+            if (btcPrice > prevBTC) btcArrow = " ↑";
+            else if (btcPrice < prevBTC) btcArrow = " ↓";
+        }
 
-if (btcPrice > prevBTC) {
-    btcArrow = " ↑";
-} else if (btcPrice < prevBTC) {
-    btcArrow = " ↓";
-}
-
-btcElement.innerText = "$" + btcPrice.toFixed(2) + btcArrow;
-
+        // ETH arrow
         let ethArrow = "";
+        if (prevETH !== null) {
+            if (ethPrice > prevETH) ethArrow = " ↑";
+            else if (ethPrice < prevETH) ethArrow = " ↓";
+        }
 
-if (ethPrice > prevETH) {
-    ethArrow = " ↑";
-} else if (ethPrice < prevETH) {
-    ethArrow = " ↓";
-}
-
-ethElement.innerText = "$" + ethPrice.toFixed(2) + ethArrow;
+        btcElement.innerText = "$" + btcPrice.toFixed(2) + btcArrow;
+        ethElement.innerText = "$" + ethPrice.toFixed(2) + ethArrow;
 
         prevBTC = btcPrice;
         prevETH = ethPrice;
@@ -179,7 +180,7 @@ ethElement.innerText = "$" + ethPrice.toFixed(2) + ethArrow;
 }
 
 getPrices();
-setInterval(getPrices, 1000);
+setInterval(getPrices, 2000);
 </script>
 
 </body>
