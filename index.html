@@ -115,26 +115,48 @@
     </table>
 
 <script>
+let prevBTC = 0;
+let prevETH = 0;
+
 function showMessage() {
     document.getElementById("message").innerText = "I will become unstoppable 💪";
 }
 
 async function getPrices() {
     try {
-        // Bitcoin
         let btcRes = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT");
         let btcData = await btcRes.json();
 
-        // Ethereum
         let ethRes = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT");
         let ethData = await ethRes.json();
 
-        document.getElementById("btc").innerText = "$" + parseFloat(btcData.price).toFixed(2);
-        document.getElementById("eth").innerText = "$" + parseFloat(ethData.price).toFixed(2);
+        let btcPrice = parseFloat(btcData.price);
+        let ethPrice = parseFloat(ethData.price);
+
+        let btcElement = document.getElementById("btc");
+        let ethElement = document.getElementById("eth");
+
+        // BTC color logic
+        if (btcPrice > prevBTC) {
+            btcElement.style.color = "lightgreen";
+        } else if (btcPrice < prevBTC) {
+            btcElement.style.color = "red";
+        }
+
+        // ETH color logic
+        if (ethPrice > prevETH) {
+            ethElement.style.color = "lightgreen";
+        } else if (ethPrice < prevETH) {
+            ethElement.style.color = "red";
+        }
+
+        btcElement.innerText = "$" + btcPrice.toFixed(2);
+        ethElement.innerText = "$" + ethPrice.toFixed(2);
+
+        prevBTC = btcPrice;
+        prevETH = ethPrice;
 
     } catch (error) {
-        document.getElementById("btc").innerText = "Error";
-        document.getElementById("eth").innerText = "Error";
         console.log(error);
     }
 }
