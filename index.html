@@ -150,8 +150,25 @@ async function getPrices() {
             ethElement.style.color = "red";
         }
 
-        btcElement.innerText = "$" + btcPrice.toFixed(2);
-        ethElement.innerText = "$" + ethPrice.toFixed(2);
+let btcArrow = "";
+
+if (btcPrice > prevBTC) {
+    btcArrow = " ↑";
+} else if (btcPrice < prevBTC) {
+    btcArrow = " ↓";
+}
+
+btcElement.innerText = "$" + btcPrice.toFixed(2) + btcArrow;
+
+        let ethArrow = "";
+
+if (ethPrice > prevETH) {
+    ethArrow = " ↑";
+} else if (ethPrice < prevETH) {
+    ethArrow = " ↓";
+}
+
+ethElement.innerText = "$" + ethPrice.toFixed(2) + ethArrow;
 
         prevBTC = btcPrice;
         prevETH = ethPrice;
