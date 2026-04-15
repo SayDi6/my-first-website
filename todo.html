@@ -81,28 +81,44 @@ function addTask() {
 
     if (task === "") return;
 
-    tasks.push(task);
+    let newTask = {
+        text: task,
+        completed: false
+    };
+
+    tasks.push(newTask);
     localStorage.setItem("tasks", JSON.stringify(tasks));
 
-    addTaskToUI(task);
+    addTaskToUI(newTask);
 
     input.value = "";
 }
-    let input = document.getElementById("taskInput");
+
+// Enter key support
+let input = document.getElementById("taskInput");
 
 input.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
+        event.preventDefault();
         addTask();
     }
 });
-    
+
 function addTaskToUI(task) {
     let li = document.createElement("li");
-    li.innerText = task;
+    li.innerText = task.text;
+
+    if (task.completed) {
+        li.classList.add("completed");
+    }
 
     // mark complete
     li.onclick = function () {
         li.classList.toggle("completed");
+
+        task.completed = !task.completed;
+
+        localStorage.setItem("tasks", JSON.stringify(tasks));
     };
 
     // delete button
@@ -113,7 +129,7 @@ function addTaskToUI(task) {
         event.stopPropagation();
         li.remove();
 
-        tasks = tasks.filter(t => t !== task);
+        tasks = tasks.filter(t => t.text !== task.text);
         localStorage.setItem("tasks", JSON.stringify(tasks));
     };
 
