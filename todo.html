@@ -145,9 +145,13 @@ function addTask() {
     if (task === "") return;
 
     let newTask = {
-        text: task,
-        completed: false
-    };
+  text: "study",
+  completed: false,
+  createdAt: ?,   ← when added
+  completedAt: ?  ← when completed
+    Date.now()
+    addTask()
+}
 
     tasks.push(newTask);
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -176,6 +180,9 @@ function addTaskToUI(task) {
 
     if (task.completed) {
         li.classList.add("completed");
+        li.onclick
+       completedAt - createdAt
+        task.text; (Completed in X min)
     }
 
     // mark complete
