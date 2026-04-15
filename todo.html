@@ -3,50 +3,92 @@
 <head>
     <title>Todo App</title>
 
-    <style>
-        body {
-            background: #0d1117;
-            color: white;
-            font-family: Arial;
-            text-align: center;
-        }
+<style>
+    body {
+        background: linear-gradient(135deg, #0d1117, #161b22);
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
 
-        .container {
-            max-width: 400px;
-            margin: 100px auto;
-            background: #161b22;
-            padding: 20px;
-            border-radius: 10px;
-        }
+    .container {
+        max-width: 420px;
+        margin: 100px auto;
+        background: #161b22;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
 
-        input {
-            padding: 10px;
-            width: 70%;
-            border: none;
-            border-radius: 5px;
-        }
+    h1 {
+        margin-bottom: 20px;
+    }
 
-        button {
-            padding: 10px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            margin-left: 5px;
-        }
+    input {
+        padding: 12px;
+        width: 65%;
+        border: none;
+        border-radius: 8px;
+        outline: none;
+        background: #21262d;
+        color: white;
+    }
 
-        li {
-            margin: 10px;
-            background: #21262d;
-            padding: 10px;
-            border-radius: 5px;
-            list-style: none;
-        }
+    button {
+        padding: 12px 15px;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        margin-left: 5px;
+        background: linear-gradient(45deg, #facc15, #f97316);
+        color: black;
+        font-weight: bold;
+        transition: 0.3s;
+    }
 
-        .completed {
-            text-decoration: line-through;
-            color: gray;
-        }
-    </style>
+    button:hover {
+        transform: scale(1.05);
+        background: linear-gradient(45deg, #f97316, #ef4444);
+    }
+
+    ul {
+        padding: 0;
+        margin-top: 20px;
+    }
+
+    li {
+        margin: 10px 0;
+        background: #21262d;
+        padding: 12px;
+        border-radius: 8px;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: 0.3s;
+    }
+
+    li:hover {
+        background: #2a2f36;
+        transform: scale(1.02);
+    }
+
+    .completed {
+        text-decoration: line-through;
+        color: gray;
+    }
+
+    li button {
+        background: #ef4444;
+        color: white;
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    li button:hover {
+        background: #dc2626;
+    }
+</style>
 </head>
 
 <body>
