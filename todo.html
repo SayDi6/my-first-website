@@ -145,13 +145,11 @@ function addTask() {
     if (task === "") return;
 
     let newTask = {
-  text: "study",
-  completed: false,
-  createdAt: ?,   ← when added
-  completedAt: ?  ← when completed
-    Date.now()
-    addTask()
-}
+        text: task,
+        completed: false,
+        createdAt: Date.now(),
+        completedAt: null
+    };
 
     tasks.push(newTask);
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -176,13 +174,18 @@ input.addEventListener("keydown", function(event) {
 
 function addTaskToUI(task) {
     let li = document.createElement("li");
+
+    // show text
     li.innerText = task.text;
 
-    if (task.completed) {
+    // if already completed (on reload)
+    if (task.completed && task.completedAt) {
         li.classList.add("completed");
-        li.onclick
-       completedAt - createdAt
-        task.text; (Completed in X min)
+
+        let diff = task.completedAt - task.createdAt;
+        let minutes = Math.floor(diff / 60000);
+
+        li.innerText = task.text + " (Completed in " + minutes + " min)";
     }
 
     // mark complete
@@ -190,6 +193,18 @@ function addTaskToUI(task) {
         li.classList.toggle("completed");
 
         task.completed = !task.completed;
+
+        if (task.completed) {
+            task.completedAt = Date.now();
+
+            let diff = task.completedAt - task.createdAt;
+            let minutes = Math.floor(diff / 60000);
+
+            li.innerText = task.text + " (Completed in " + minutes + " min)";
+        } else {
+            task.completedAt = null;
+            li.innerText = task.text;
+        }
 
         localStorage.setItem("tasks", JSON.stringify(tasks));
     };
