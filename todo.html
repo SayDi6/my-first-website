@@ -39,27 +39,57 @@
     <ul id="taskList"></ul>
 
 <script>
+let tasks = [];
+
+// load saved tasks when page opens
+window.onload = function () {
+    let saved = localStorage.getItem("tasks");
+
+    if (saved) {
+        tasks = JSON.parse(saved);
+        tasks.forEach(task => addTaskToUI(task));
+    }
+};
+
 function addTask() {
     let input = document.getElementById("taskInput");
     let task = input.value;
 
+    if (task === "") return;
+
+    tasks.push(task);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+
+    addTaskToUI(task);
+
+    input.value = "";
+}
+
+function addTaskToUI(task) {
     let li = document.createElement("li");
     li.innerText = task;
 
-    // create delete button
+    // mark complete
+    li.onclick = function () {
+        li.classList.toggle("completed");
+    };
+
+    // delete button
     let btn = document.createElement("button");
     btn.innerText = "❌";
 
-    // delete logic
-    btn.onclick = function () {
+    btn.onclick = function (event) {
+        event.stopPropagation();
         li.remove();
+
+        // remove from array + update storage
+        tasks = tasks.filter(t => t !== task);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
     };
 
     li.appendChild(btn);
 
     document.getElementById("taskList").appendChild(li);
-
-    input.value = "";
 }
 </script>
 
