@@ -20,10 +20,6 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        h1 {
-            margin-bottom: 20px;
-        }
-
         input {
             padding: 12px;
             width: 65%;
@@ -43,12 +39,6 @@
             background: linear-gradient(45deg, #facc15, #f97316);
             color: black;
             font-weight: bold;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            transform: scale(1.05);
-            background: linear-gradient(45deg, #f97316, #ef4444);
         }
 
         ul {
@@ -65,12 +55,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: 0.3s;
-        }
-
-        li:hover {
-            background: #2a2f36;
-            transform: scale(1.02);
         }
 
         .completed {
@@ -85,20 +69,14 @@
             font-size: 12px;
         }
 
-        li button:hover {
-            background: #dc2626;
-        }
-
         #taskCount {
             margin-top: 10px;
             color: lightgreen;
-            font-size: 14px;
         }
 
         #emptyMsg {
             margin-top: 10px;
             color: gray;
-            font-size: 14px;
         }
     </style>
 </head>
@@ -112,12 +90,10 @@
     <input id="taskInput" placeholder="Enter task">
     <button onclick="addTask()">Add</button>
 
-    <!-- ✅ Correct placement -->
     <p id="taskCount"></p>
 
     <ul id="taskList"></ul>
 
-    <!-- ✅ Correct placement -->
     <p id="emptyMsg">No tasks yet 👀</p>
 
 </div>
@@ -175,23 +151,25 @@ input.addEventListener("keydown", function(event) {
 function addTaskToUI(task) {
     let li = document.createElement("li");
 
-    // show text
-    li.innerText = task.text;
+    // text span (important fix)
+    let textSpan = document.createElement("span");
+    li.appendChild(textSpan);
 
-    // if already completed (on reload)
+    // reload completed state
     if (task.completed && task.completedAt) {
         li.classList.add("completed");
 
-       let diff = task.completedAt - task.createdAt;
+        let diff = task.completedAt - task.createdAt;
+        let minutes = Math.floor(diff / 60000);
+        let seconds = Math.floor((diff % 60000) / 1000);
 
-let minutes = Math.floor(diff / 60000);
-let seconds = Math.floor((diff % 60000) / 1000);
-
-li.innerText = task.text + " (Completed in " + minutes + " min " + seconds + " sec)";
+        textSpan.innerText = task.text + ` (Completed in ${minutes}m ${seconds}s)`;
+    } else {
+        textSpan.innerText = task.text;
     }
 
     // mark complete
-    li.onclick = function () {
+    li.addEventListener("click", function () {
         li.classList.toggle("completed");
 
         task.completed = !task.completed;
@@ -201,15 +179,16 @@ li.innerText = task.text + " (Completed in " + minutes + " min " + seconds + " s
 
             let diff = task.completedAt - task.createdAt;
             let minutes = Math.floor(diff / 60000);
+            let seconds = Math.floor((diff % 60000) / 1000);
 
-            li.innerText = task.text + " (Completed in " + minutes + " min)";
+            textSpan.innerText = task.text + ` (Completed in ${minutes}m ${seconds}s)`;
         } else {
             task.completedAt = null;
-            li.innerText = task.text;
+            textSpan.innerText = task.text;
         }
 
         localStorage.setItem("tasks", JSON.stringify(tasks));
-    };
+    });
 
     // delete button
     let btn = document.createElement("button");
@@ -219,7 +198,9 @@ li.innerText = task.text + " (Completed in " + minutes + " min " + seconds + " s
         event.stopPropagation();
         li.remove();
 
-        tasks = tasks.filter(t => t.text !== task.text);
+        // fixed delete logic
+        tasks = tasks.filter(t => t !== task);
+
         localStorage.setItem("tasks", JSON.stringify(tasks));
 
         updateCount();
