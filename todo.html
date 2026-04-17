@@ -182,10 +182,12 @@ function addTaskToUI(task) {
     if (task.completed && task.completedAt) {
         li.classList.add("completed");
 
-        let diff = task.completedAt - task.createdAt;
-        let minutes = Math.floor(diff / 60000);
+       let diff = task.completedAt - task.createdAt;
 
-        li.innerText = task.text + " (Completed in " + minutes + " min)";
+let minutes = Math.floor(diff / 60000);
+let seconds = Math.floor((diff % 60000) / 1000);
+
+li.innerText = task.text + " (Completed in " + minutes + " min " + seconds + " sec)";
     }
 
     // mark complete
