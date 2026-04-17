@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cafe Bliss ☕</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #f8f5f2;
+        }
+
+        header {
+            background: #6b4226;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        section {
+            padding: 20px;
+        }
+
+        .menu-item {
+            background: white;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .order-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 10px;
+            background: #6b4226;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Cafe Bliss ☕</h1>
+    <p>Fresh Coffee, Happy Mood</p>
+</header>
+
+<section>
+    <h2>📍 Address</h2>
+    <p>Hill Cart Road, Siliguri</p>
+
+    <h2>⏰ Timings</h2>
+    <p>8.30 AM - 9.30 PM</p>
+</section>
+
+<section>
+    <h2>🍽️ Menu</h2>
+
+    <div class="menu-item">Espresso - ₹100</div>
+    <div class="menu-item">Cappuccino - ₹150</div>
+    <div class="menu-item">Cold Coffee - ₹120</div>
+    <div class="menu-item">Sandwich - ₹70</div>
+    <div class="menu-item">Grilled Sandwich - ₹100</div>
+</section>
+
+<section>
+    <h2>📞 Contact</h2>
+    <p>+91 98*65432**</p>
+</section>
+
+<section class="order-box">
+    <h2>🛒 Place Order</h2>
+
+    <input id="orderInput" placeholder="Enter item name">
+    <button onclick="placeOrder()">Order</button>
+
+    <p id="orderStatus"></p>
+</section>
+
+<script>
+function placeOrder() {
+    let item = document.getElementById("orderInput").value;
+
+    if (item === "") return;
+
+    let orderId = Math.floor(Math.random() * 1000);
+
+    document.getElementById("orderStatus").innerText =
+        "Order placed! Your ID: " + orderId;
+}
+</script>
+
+</body>
+</html>
