@@ -11,39 +11,62 @@
         }
 
         header {
-            background: #6b4226;
+            background: linear-gradient(45deg, #6b4226, #8b5e3c);
             color: white;
-            padding: 20px;
+            padding: 30px;
             text-align: center;
-
-
-        .menu-item {
-            background: white;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
         }
 
-        .order-box {
-            background: #fff;
-            padding: 15px;
+        section {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .menu-item {
+            background: #f1f1f1;
+            margin: 10px auto;
+            padding: 12px;
             border-radius: 8px;
+            width: 80%;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            width: 60%;
+            margin-right: 5px;
         }
 
         button {
-            padding: 10px;
+            padding: 10px 15px;
             background: #6b4226;
             color: white;
             border: none;
+            border-radius: 6px;
             cursor: pointer;
+            transition: 0.3s;
         }
-        
-        section {
-        max-width: 800px;
-        margin: 20px auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
+
+        button:hover {
+            background: #8b5e3c;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -60,7 +83,7 @@
     <p>Hill Cart Road, Siliguri</p>
 
     <h2>⏰ Timings</h2>
-    <p>8.30 AM - 9.30 PM</p>
+    <p>8:30 AM - 9:30 PM</p>
 </section>
 
 <section>
@@ -75,10 +98,10 @@
 
 <section>
     <h2>📞 Contact</h2>
-    <p>+91 98*65432**</p>
+    <p>+91 9876543210</p>
 </section>
 
-<section class="order-box">
+<section>
     <h2>🛒 Place Order</h2>
 
     <input id="orderInput" placeholder="Enter item name">
@@ -95,8 +118,25 @@ function placeOrder() {
 
     let orderId = Math.floor(Math.random() * 1000);
 
-    document.getElementById("orderStatus").innerText =
-        "Order placed! Your ID: " + orderId;
+    let timeLeft = Math.floor(Math.random() * 5) + 1;
+
+    let status = document.getElementById("orderStatus");
+
+    status.innerText = "Order ID: " + orderId + 
+        " | Preparing... " + timeLeft + " min";
+
+    let interval = setInterval(() => {
+        timeLeft--;
+
+        if (timeLeft > 0) {
+            status.innerText = "Order ID: " + orderId + 
+                " | Preparing... " + timeLeft + " min";
+        } else {
+            status.innerText = "Order ID: " + orderId + 
+                " | Ready! ☕";
+            clearInterval(interval);
+        }
+    }, 60000);
 }
 </script>
 
