@@ -117,26 +117,26 @@ function placeOrder() {
     if (item === "") return;
 
     let orderId = Math.floor(Math.random() * 1000);
-
     let timeLeft = Math.floor(Math.random() * 5) + 1;
 
-    let status = document.getElementById("orderStatus");
+    let li = document.createElement("li");
 
-    status.innerText = "Order ID: " + orderId + 
-        " | Preparing... " + timeLeft + " min";
+    li.innerText = "Order " + orderId + " (" + item + ") - Preparing... " + timeLeft + " min";
+
+    document.getElementById("orderList").appendChild(li);
 
     let interval = setInterval(() => {
         timeLeft--;
 
         if (timeLeft > 0) {
-            status.innerText = "Order ID: " + orderId + 
-                " | Preparing... " + timeLeft + " min";
+            li.innerText = "Order " + orderId + " (" + item + ") - Preparing... " + timeLeft + " min";
         } else {
-            status.innerText = "Order ID: " + orderId + 
-                " | Ready! ☕";
+            li.innerText = "Order " + orderId + " (" + item + ") - Ready! ☕";
             clearInterval(interval);
         }
     }, 60000);
+
+    document.getElementById("orderInput").value = "";
 }
 </script>
 
