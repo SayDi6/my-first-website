@@ -27,20 +27,20 @@
             animation: fadeIn 0.6s ease;
         }
 
-       .menu-item {
-         background: #f1f1f1;
-         margin: 10px auto;
-         padding: 12px;
-         border-radius: 8px;
-         width: 80%;
-         cursor: pointer;
-         transition: 0.2s;
-      }
+        .menu-item {
+            background: #f1f1f1;
+            margin: 10px auto;
+            padding: 12px;
+            border-radius: 8px;
+            width: 80%;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-       .menu-item:hover {
+        .menu-item:hover {
             background: #ddd;
             transform: scale(1.03);
-      }
+        }
 
         input {
             padding: 10px;
@@ -48,6 +48,10 @@
             border: 1px solid #ccc;
             width: 60%;
             margin-right: 5px;
+        }
+
+        #qtyInput {
+            width: 80px;
         }
 
         button {
@@ -63,6 +67,19 @@
         button:hover {
             background: #8b5e3c;
             transform: scale(1.05);
+        }
+
+        #orderList {
+            list-style: none;
+            padding: 0;
+        }
+
+        #orderList li {
+            background: #f1f1f1;
+            margin: 8px auto;
+            padding: 10px;
+            border-radius: 8px;
+            width: 80%;
         }
 
         @keyframes fadeIn {
@@ -113,46 +130,80 @@
     <h2>🛒 Place Order</h2>
 
     <input id="orderInput" placeholder="Enter item name">
+    <input id="qtyInput" type="number" min="1" value="1">
     <button onclick="placeOrder()">Order</button>
 
-    <p id="orderStatus"></p>
     <h3>📦 Active Orders</h3>
-<ul id="orderList"></ul>
+    <ul id="orderList"></ul>
 </section>
 
 <script>
-    let menuItems = ["espresso", "cappuccino", "cold coffee", "black coffee", "sandwich", "grilled sandwich"];
-    
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+let menuItems = [
+    "espresso",
+    "cappuccino",
+    "cold coffee",
+    "black coffee",
+    "sandwich",
+    "grilled sandwich"
+];
+
 function placeOrder(item) {
-    // if coming from input (fallback)
     if (!item) {
         item = document.getElementById("orderInput").value.toLowerCase();
     }
 
-    if (!item) return;
+    let qty = parseInt(document.getElementById("qtyInput").value);
 
-    let orderId = Math.floor(Math.random() * 1000);
-    let timeLeft = Math.floor(Math.random() * 5) + 1;
+    if (!item || qty <= 0) return;
 
-    let li = document.createElement("li");
+    if (!menuItems.includes(item)) {
+        alert("❌ Item not available in menu");
+        return;
+    }
 
-    li.innerText = "Order " + orderId + " (" + item + ") - Preparing... " + timeLeft + " min";
+    let order = {
+        id: Date.now(),
+        item: item,
+        qty: qty,
+        timeLeft: Math.floor(Math.random() * 5) + 1
+    };
 
-    document.getElementById("orderList").appendChild(li);
-
-    let interval = setInterval(() => {
-        timeLeft--;
-
-        if (timeLeft > 0) {
-            li.innerText = "Order " + orderId + " (" + item + ") - Preparing... " + timeLeft + " min";
-        } else {
-            li.innerText = "Order " + orderId + " (" + item + ") - Ready! ☕";
-            clearInterval(interval);
-        }
-    }, 60000);
+    orders.push(order);
+    localStorage.setItem("orders", JSON.stringify(orders));
 
     document.getElementById("orderInput").value = "";
+    document.getElementById("qtyInput").value = 1;
+
+    renderOrders();
 }
+
+function renderOrders() {
+    let list = document.getElementById("orderList");
+    list.innerHTML = "";
+
+    orders.forEach(order => {
+        let li = document.createElement("li");
+
+        li.innerText = `Order ${order.id} (${order.item} x${order.qty}) - Preparing... ${order.timeLeft} min`;
+
+        let btn = document.createElement("button");
+        btn.innerText = "❌";
+        btn.style.marginLeft = "10px";
+
+        btn.onclick = function () {
+            orders = orders.filter(o => o.id !== order.id);
+            localStorage.setItem("orders", JSON.stringify(orders));
+            renderOrders();
+        };
+
+        li.appendChild(btn);
+        list.appendChild(li);
+    });
+}
+
+renderOrders();
 </script>
 
 </body>
