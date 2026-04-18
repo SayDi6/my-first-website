@@ -92,6 +92,7 @@
     <div class="menu-item">Espresso - ₹100</div>
     <div class="menu-item">Cappuccino - ₹150</div>
     <div class="menu-item">Cold Coffee - ₹120</div>
+    <div class="menu-item">Black Coffee - ₹50</div>
     <div class="menu-item">Sandwich - ₹70</div>
     <div class="menu-item">Grilled Sandwich - ₹100</div>
 </section>
@@ -113,10 +114,18 @@
 </section>
 
 <script>
+    let menuItems = ["espresso", "cappuccino", "cold coffee", "sandwich", "grilled sandwich"];
+    
 function placeOrder() {
-    let item = document.getElementById("orderInput").value;
+    let item = document.getElementById("orderInput").value.toLowerCase();
 
     if (item === "") return;
+
+    // ✅ Check if item exists
+    if (!menuItems.includes(item)) {
+        alert("❌ Item not available in menu");
+        return;
+    }
 
     let orderId = Math.floor(Math.random() * 1000);
     let timeLeft = Math.floor(Math.random() * 5) + 1;
