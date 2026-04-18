@@ -113,12 +113,12 @@
 <section>
     <h2>🍽️ Menu</h2>
 
-    <div class="menu-item" onclick="placeOrder('espresso')">Espresso - ₹100</div>
-    <div class="menu-item" onclick="placeOrder('cappuccino')">Cappuccino - ₹150</div>
-    <div class="menu-item" onclick="placeOrder('cold coffee')">Cold Coffee - ₹120</div>
-    <div class="menu-item" onclick="placeOrder('black coffee')">Black Coffee - ₹50</div>
-    <div class="menu-item" onclick="placeOrder('sandwich')">Sandwich - ₹70</div>
-    <div class="menu-item" onclick="placeOrder('grilled sandwich')">Grilled Sandwich - ₹100</div>
+<div class="menu-item" onclick="quickOrder('espresso', 100)">Espresso - ₹100</div>
+<div class="menu-item" onclick="quickOrder('cappuccino', 150)">Cappuccino - ₹150</div>
+<div class="menu-item" onclick="quickOrder('cold coffee', 120)">Cold Coffee - ₹120</div>
+<div class="menu-item" onclick="quickOrder('black coffee', 50)">Black Coffee - ₹50</div>
+<div class="menu-item" onclick="quickOrder('sandwich', 70)">Sandwich - ₹70</div>
+<div class="menu-item" onclick="quickOrder('grilled sandwich', 100)">Grilled Sandwich - ₹100</div>
 </section>
 
 <section>
@@ -149,12 +149,24 @@ let menuItems = [
     "grilled sandwich"
 ];
 
-function placeOrder(item) {
+// ✅ QUICK ORDER (click menu → ask quantity)
+function quickOrder(item) {
+    let qty = prompt("Enter quantity:", "1");
+
+    qty = parseInt(qty);
+
+    if (!qty || qty <= 0) return;
+
+    placeOrder(item, qty);
+}
+
+// ✅ MAIN ORDER FUNCTION
+function placeOrder(item, qtyFromClick) {
     if (!item) {
         item = document.getElementById("orderInput").value.toLowerCase();
     }
 
-    let qty = parseInt(document.getElementById("qtyInput").value);
+    let qty = qtyFromClick || parseInt(document.getElementById("qtyInput").value);
 
     if (!item || qty <= 0) return;
 
@@ -179,6 +191,7 @@ function placeOrder(item) {
     renderOrders();
 }
 
+// ✅ RENDER ORDERS
 function renderOrders() {
     let list = document.getElementById("orderList");
     list.innerHTML = "";
@@ -203,6 +216,7 @@ function renderOrders() {
     });
 }
 
+// ✅ LOAD ON REFRESH
 renderOrders();
 </script>
 
