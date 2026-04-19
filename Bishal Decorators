@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bishal Decorators</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f8f5f2;
+}
+
+/* HEADER */
+header {
+    background: linear-gradient(45deg, #6b4226, #8b5e3c);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+header p {
+    margin: 10px 0;
+}
+
+/* BUTTON */
+.btn {
+    background: white;
+    color: #6b4226;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+/* SECTION */
+section {
+    max-width: 900px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* GALLERY */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.gallery img, .gallery video {
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* SERVICES */
+.service {
+    background: #f1f1f1;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+}
+
+/* CONTACT */
+.contact a {
+    display: block;
+    margin: 5px 0;
+    color: #6b4226;
+    text-decoration: none;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Bishal Decorators</h1>
+    <p>Wedding | Birthday | Event Decoration</p>
+
+    <a class="btn" href="tel:6294848759">📞 Call Now</a>
+    <a class="btn" href="https://wa.me/916294848759">💬 WhatsApp</a>
+</header>
+
+<section>
+    <h2>✨ Our Work</h2>
+
+    <div class="gallery">
+        <!-- ADD YOUR IMAGES HERE -->
+        <img src="photo1.jpg">
+        <img src="photo2.jpg">
+
+        <!-- ADD VIDEO -->
+        <video controls>
+            <source src="video1.mp4">
+        </video>
+    </div>
+</section>
+
+<section>
+    <h2>🎉 Services</h2>
+
+    <div class="service">Wedding Decoration</div>
+    <div class="service">Birthday Decoration</div>
+    <div class="service">Stage Decoration</div>
+    <div class="service">Event Decoration</div>
+</section>
+
+<section class="contact">
+    <h2>📍 Contact</h2>
+
+    <p>Karidhya, Pipeline (near Ghosh Pukur), Suri, Birbhum</p>
+
+    <a href="tel:6294848759">📞 6294848759</a>
+    <a href="https://wa.me/916294848759">💬 WhatsApp Chat</a>
+</section>
+
+</body>
+</html>
