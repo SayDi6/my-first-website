@@ -94,12 +94,13 @@ section {
 
     <div class="gallery">
         <!-- ADD YOUR IMAGES HERE -->
-        <img src="photo1.jpg">
-        <img src="photo2.jpg">
+        <img src="shilapandel.jpeg">
+        <img src="shilapandel2.jpeg">
+        <img src="shilapandel3.jpeg">
 
         <!-- ADD VIDEO -->
         <video controls>
-            <source src="video1.mp4">
+            <source src="shilapandelvideo3.mp4">
         </video>
     </div>
 </section>
