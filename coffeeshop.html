@@ -137,6 +137,7 @@
 
     <h3>📦 Active Orders</h3>
     <ul id="orderList"></ul>
+    <h3 id="totalBill">Total: ₹0</h3>
 </section>
 
 <script>
@@ -151,10 +152,8 @@ let menuPrices = {
     "grilled sandwich": 100
 };
 
-// ✅ QUICK ORDER (click menu → ask quantity)
 function quickOrder(item) {
     let qty = prompt("Enter quantity:", "1");
-
     qty = parseInt(qty);
 
     if (!qty || qty <= 0) return;
@@ -162,15 +161,7 @@ function quickOrder(item) {
     placeOrder(item, qty);
 }
 
-// ✅ MAIN ORDER FUNCTION
-function placeOrder(item, qtyFromClick)
-     let order = {
-    id: Date.now(),
-    item: item,
-    qty: qty,
-    price: menuPrices[item],
-    timeLeft: Math.floor(Math.random() * 5) + 1
-    };{
+function placeOrder(item, qtyFromClick) {
     if (!item) {
         item = document.getElementById("orderInput").value.toLowerCase();
     }
@@ -179,7 +170,7 @@ function placeOrder(item, qtyFromClick)
 
     if (!item || qty <= 0) return;
 
-    if (!menuPrices[item])) {
+    if (!menuPrices[item]) {
         alert("❌ Item not available in menu");
         return;
     }
@@ -188,6 +179,7 @@ function placeOrder(item, qtyFromClick)
         id: Date.now(),
         item: item,
         qty: qty,
+        price: menuPrices[item],
         timeLeft: Math.floor(Math.random() * 5) + 1
     };
 
@@ -200,17 +192,19 @@ function placeOrder(item, qtyFromClick)
     renderOrders();
 }
 
-// ✅ RENDER ORDERS
 function renderOrders() {
     let list = document.getElementById("orderList");
     list.innerHTML = "";
+
+    let totalBill = 0;
 
     orders.forEach(order => {
         let li = document.createElement("li");
 
         let total = order.price * order.qty;
+        totalBill += total;
 
-    li.innerText = `Order ${order.id} (${order.item} x${order.qty}) - ₹${total} | Preparing... ${order.timeLeft} min`;
+        li.innerText = `Order ${order.id} (${order.item} x${order.qty}) - ₹${total} | Preparing... ${order.timeLeft} min`;
 
         let btn = document.createElement("button");
         btn.innerText = "❌";
@@ -225,16 +219,10 @@ function renderOrders() {
         li.appendChild(btn);
         list.appendChild(li);
     });
+
+    document.getElementById("totalBill").innerText = "Total: ₹" + totalBill;
 }
-    let totalBill = 0;
 
-      orders.forEach(order => {
-      totalBill += order.price * order.qty;
-     });
-
-     document.getElementById("totalBill").innerText = "Total: ₹" + totalBill;
-
-// ✅ LOAD ON REFRESH
 renderOrders();
 </script>
 
