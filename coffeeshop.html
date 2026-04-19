@@ -1,164 +1,178 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cafe Bliss ☕</title>
+<title>Cafe Bliss ☕</title>
 
-    <style>
-        body {
-            font-family: Arial;
-            margin: 0;
-            background: #f8f5f2;
-        }
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #f8f5f2;
+}
 
-        header {
-            background: linear-gradient(45deg, #6b4226, #8b5e3c);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
+header {
+    background: linear-gradient(45deg, #6b4226, #8b5e3c);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
 
-        section {
-            max-width: 800px;
-            margin: 30px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            animation: fadeIn 0.6s ease;
-        }
+section {
+    max-width: 800px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
 
-        .menu-item {
-            background: #f1f1f1;
-            margin: 10px auto;
-            padding: 12px;
-            border-radius: 8px;
-            width: 80%;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+.menu-item {
+    background: #f1f1f1;
+    margin: 10px auto;
+    padding: 12px;
+    border-radius: 8px;
+    width: 80%;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        .menu-item:hover {
-            background: #ddd;
-            transform: scale(1.03);
-        }
+.menu-item:hover {
+    background: #ddd;
+    transform: scale(1.03);
+}
 
-        input {
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            width: 60%;
-            margin-right: 5px;
-        }
+input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 60%;
+}
 
-        #qtyInput {
-            width: 80px;
-        }
+#qtyInput {
+    width: 80px;
+}
 
-        button {
-            padding: 10px 15px;
-            background: #6b4226;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+button {
+    padding: 10px 15px;
+    background: #6b4226;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
 
-        button:hover {
-            background: #8b5e3c;
-            transform: scale(1.05);
-        }
+#orderList {
+    list-style: none;
+    padding: 0;
+}
 
-        #orderList {
-            list-style: none;
-            padding: 0;
-        }
+#orderList li {
+    background: #f1f1f1;
+    margin: 8px auto;
+    padding: 10px;
+    border-radius: 8px;
+    width: 80%;
+}
 
-        #orderList li {
-            background: #f1f1f1;
-            margin: 8px auto;
-            padding: 10px;
-            border-radius: 8px;
-            width: 80%;
-        }
-        
-        <h3 id="totalBill">Total: ₹0</h3>
+/* POPUP */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+.popup-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+</style>
 </head>
 
 <body>
 
+<!-- POPUP -->
+<div id="popup" class="popup">
+    <div class="popup-box">
+        <h3>Select Quantity</h3>
+        <input id="popupQty" type="number" value="1">
+        <br><br>
+        <button onclick="confirmOrder()">OK</button>
+        <button onclick="closePopup()">Cancel</button>
+    </div>
+</div>
+
 <header>
-    <h1>Cafe Bliss ☕</h1>
-    <p>Fresh Coffee, Happy Mood</p>
+<h1>Cafe Bliss ☕</h1>
+<p>Fresh Coffee, Happy Mood</p>
 </header>
 
 <section>
-    <h2>📍 Address</h2>
-    <p>Hill Cart Road, Siliguri</p>
+<h2>🍽️ Menu</h2>
 
-    <h2>⏰ Timings</h2>
-    <p>9:00 AM - 9:30 PM</p>
+<div class="menu-item" onclick="quickOrder('espresso')">Espresso - ₹100</div>
+<div class="menu-item" onclick="quickOrder('cappuccino')">Cappuccino - ₹150</div>
+<div class="menu-item" onclick="quickOrder('cold coffee')">Cold Coffee - ₹120</div>
+<div class="menu-item" onclick="quickOrder('black coffee')">Black Coffee - ₹50</div>
+<div class="menu-item" onclick="quickOrder('sandwich')">Sandwich - ₹70</div>
+<div class="menu-item" onclick="quickOrder('grilled sandwich')">Grilled Sandwich - ₹100</div>
+
 </section>
 
 <section>
-    <h2>🍽️ Menu</h2>
+<h2>🛒 Place Order</h2>
 
-<div class="menu-item" onclick="quickOrder('espresso', 100)">Espresso - ₹100</div>
-<div class="menu-item" onclick="quickOrder('cappuccino', 150)">Cappuccino - ₹150</div>
-<div class="menu-item" onclick="quickOrder('cold coffee', 120)">Cold Coffee - ₹120</div>
-<div class="menu-item" onclick="quickOrder('black coffee', 50)">Black Coffee - ₹50</div>
-<div class="menu-item" onclick="quickOrder('sandwich', 70)">Sandwich - ₹70</div>
-<div class="menu-item" onclick="quickOrder('grilled sandwich', 100)">Grilled Sandwich - ₹100</div>
-</section>
+<input id="orderInput" placeholder="Enter item name">
+<input id="qtyInput" type="number" value="1">
+<button onclick="placeOrder()">Order</button>
 
-<section>
-    <h2>📞 Contact</h2>
-    <p>+91 9876543210</p>
-</section>
+<h3>📦 Active Orders</h3>
+<ul id="orderList"></ul>
 
-<section>
-    <h2>🛒 Place Order</h2>
-
-    <input id="orderInput" placeholder="Enter item name">
-    <input id="qtyInput" type="number" min="1" value="1">
-    <button onclick="placeOrder()">Order</button>
-
-    <h3>📦 Active Orders</h3>
-    <ul id="orderList"></ul>
-    <h3 id="totalBill">Total: ₹0</h3>
+<h3 id="totalBill">Total: ₹0</h3>
 </section>
 
 <script>
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
 let menuPrices = {
-    "espresso": 100,
-    "cappuccino": 150,
+    espresso: 100,
+    cappuccino: 150,
     "cold coffee": 120,
     "black coffee": 50,
-    "sandwich": 70,
+    sandwich: 70,
     "grilled sandwich": 100
 };
 
-function quickOrder(item) {
-    let qty = prompt("Enter quantity:", "1");
-    qty = parseInt(qty);
+let selectedItem = null;
 
+function quickOrder(item) {
+    selectedItem = item;
+    document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+    document.getElementById("popup").style.display = "none";
+}
+
+function confirmOrder() {
+    let qty = parseInt(document.getElementById("popupQty").value);
     if (!qty || qty <= 0) return;
 
-    placeOrder(item, qty);
+    placeOrder(selectedItem, qty);
+    closePopup();
 }
 
 function placeOrder(item, qtyFromClick) {
@@ -171,23 +185,19 @@ function placeOrder(item, qtyFromClick) {
     if (!item || qty <= 0) return;
 
     if (!menuPrices[item]) {
-        alert("❌ Item not available in menu");
+        alert("Item not in menu");
         return;
     }
 
     let order = {
         id: Date.now(),
-        item: item,
-        qty: qty,
-        price: menuPrices[item],
-        timeLeft: Math.floor(Math.random() * 5) + 1
+        item,
+        qty,
+        price: menuPrices[item]
     };
 
     orders.push(order);
     localStorage.setItem("orders", JSON.stringify(orders));
-
-    document.getElementById("orderInput").value = "";
-    document.getElementById("qtyInput").value = 1;
 
     renderOrders();
 }
@@ -204,13 +214,12 @@ function renderOrders() {
         let total = order.price * order.qty;
         totalBill += total;
 
-        li.innerText = `Order ${order.id} (${order.item} x${order.qty}) - ₹${total} | Preparing... ${order.timeLeft} min`;
+        li.innerText = `Order ${order.id} (${order.item} x${order.qty}) - ₹${total} | Preparing`;
 
         let btn = document.createElement("button");
         btn.innerText = "❌";
-        btn.style.marginLeft = "10px";
 
-        btn.onclick = function () {
+        btn.onclick = () => {
             orders = orders.filter(o => o.id !== order.id);
             localStorage.setItem("orders", JSON.stringify(orders));
             renderOrders();
