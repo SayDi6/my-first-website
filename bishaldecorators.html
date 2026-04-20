@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     
-<style>
+<style> 
   html {
     scroll-behavior: smooth;
 }
@@ -28,23 +28,34 @@ body {
 }
 
 /* HEADER */
-header {
+ header {
     background: linear-gradient(45deg, #6b4226, #8b5e3c);
     color: white;
     text-align: center;
-    padding: 60px 20px;
+    padding: 70px 20px;
     position: sticky;
     top: 0;
     z-index: 1000;
+    animation: slideDown 0.8s ease;
+ }
+
+ header h1 {
+    font-size: 38px;
+    margin: 0;
+    letter-spacing: 1px;
+    animation: fadeZoom 1s ease;
+    transition: 0.3s;
 }
 
-header h1 {
-    font-size: 36px;
-    margin: 0;
+header h1:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255,255,255,0.6);
 }
 
 header p {
-    margin: 10px 0 20px;
+    margin-top: 10px;
+    opacity: 0.9;
+    animation: fadeInText 1.2s ease;
 }
 
 /* BUTTON */
@@ -163,6 +174,39 @@ section.show {
     transform: scale(1.1);
     background: #1ebe5d;
 }
+    @keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeZoom {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+}
+    
 </style>
 </head>
 
@@ -173,7 +217,10 @@ section.show {
 <p>Making Your Events Beautiful</p>
 
     <a class="btn" href="tel:6294848759">📞 Call Now</a>
-    <a class="btn" href="https://wa.me/916294848759">💬 WhatsApp</a>
+    <a class="btn" href="https://wa.me/916294848759" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="18">
+    WhatsApp
+    </a>
 </header>
 
 <section>
@@ -207,7 +254,10 @@ section.show {
     <p>Karidhya, Pipeline Road (near Ghosh Pukur), Suri, Birbhum</p>
 
     <a href="tel:6294848759">📞 6294848759</a>
-    <a href="https://wa.me/916294848759">💬 WhatsApp Chat</a>
+    <a href="https://wa.me/916294848759" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="18">
+    WhatsApp Chat
+    </a>
 </section>
     
 <script>
