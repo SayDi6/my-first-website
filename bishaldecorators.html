@@ -144,6 +144,25 @@ section.show {
     from { transform: scale(0.7); }
     to { transform: scale(1); }
 }
+    .whatsapp-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #25D366;
+    color: white;
+    font-size: 24px;
+    padding: 15px;
+    border-radius: 50%;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: 0.3s;
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.1);
+    background: #1ebe5d;
+}
 </style>
 </head>
 
@@ -218,5 +237,8 @@ function closeLightbox() {
     <div id="lightbox" class="lightbox" onclick="closeLightbox()">
     <img id="lightboxImg">
 </div>
+    <a href="https://wa.me/916294848759" target="_blank" class="whatsapp-btn">
+    💬
+    </a>
 </body>
 </html>
