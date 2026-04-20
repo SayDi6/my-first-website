@@ -121,6 +121,29 @@ section.show {
     text-decoration: none;
     font-weight: bold;
 }
+    .lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.7); }
+    to { transform: scale(1); }
+}
 </style>
 </head>
 
@@ -139,9 +162,9 @@ section.show {
 
     <div class="gallery">
         <!-- ADD YOUR IMAGES HERE -->
-        <img src="shilapandel.jpeg">
-        <img src="shilapandel2.jpeg">
-        <img src="shilapandel3.jpeg">
+        <img src="shilapandel.jpeg" onclick="openLightbox(this)">
+        <img src="shilapandel2.jpeg" onclick="openLightbox(this)">
+        <img src="shilapandel3.jpeg" onclick="openLightbox(this)">
 
         <!-- ADD VIDEO -->
         <video controls>
@@ -183,6 +206,17 @@ function showSections() {
 
 window.addEventListener("scroll", showSections);
 window.addEventListener("load", showSections);
+    function openLightbox(img) {
+    document.getElementById("lightbox").style.display = "flex";
+    document.getElementById("lightboxImg").src = img.src;
+}
+
+function closeLightbox() {
+    document.getElementById("lightbox").style.display = "none";
+}
 </script>
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg">
+</div>
 </body>
 </html>
