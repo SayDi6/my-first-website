@@ -171,17 +171,18 @@ section.show {
 <script>
 let sections = document.querySelectorAll("section");
 
-window.addEventListener("scroll", () => {
+function showSections() {
     sections.forEach(sec => {
-        let top = window.scrollY;
-        let offset = sec.offsetTop - 300;
-        let height = sec.offsetHeight;
+        let rect = sec.getBoundingClientRect();
 
-        if (top > offset && top < offset + height) {
+        if (rect.top < window.innerHeight - 100) {
             sec.classList.add("show");
         }
     });
-});
+}
+
+window.addEventListener("scroll", showSections);
+window.addEventListener("load", showSections);
 </script>
 </body>
 </html>
