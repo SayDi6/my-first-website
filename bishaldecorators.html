@@ -14,13 +14,36 @@ body {
  margin: 0;
  font-family: Arial, sans-serif;
  background: #f8f5f2;
+ animation: fadeIn 0.6s ease-out;
 }
 
-/* HEADER */
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+ from { opacity: 0; transform: translateY(8px); }
+ to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientMove {
+ 0% { background-position: 0% 50%; }
+ 50% { background-position: 100% 50%; }
+ 100% { background-position: 0% 50%; }
+}
+
+@keyframes slideDown {
+ from { transform: translateY(-40px); opacity: 0; }
+ to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes zoomIn {
+ from { transform: scale(0.85); opacity: 0; }
+ to { transform: scale(1); opacity: 1; }
+}
+
+/* ===== HEADER ===== */
 header {
  background: linear-gradient(-45deg, #6b4226, #8b5e3c, #6b4226, #a47148);
  background-size: 300% 300%;
- animation: gradientMove 8s ease infinite;
+ animation: gradientMove 8s ease infinite, slideDown 0.6s ease;
  color: white;
  text-align: center;
  padding: 45px 15px;
@@ -41,7 +64,7 @@ header p {
  margin-bottom: 20px;
 }
 
-/* BUTTON */
+/* ===== BUTTON ===== */
 .btn {
  display: block;
  width: 90%;
@@ -52,9 +75,15 @@ header p {
  background: rgba(255,255,255,0.95);
  color: #6b4226;
  text-decoration: none;
+ transition: 0.25s ease;
 }
 
-/* SECTION */
+.btn:hover {
+ transform: scale(1.04);
+ box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ===== SECTION ===== */
 section {
  max-width: 900px;
  margin: 15px;
@@ -63,9 +92,18 @@ section {
  border-radius: 12px;
  text-align: center;
  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+
+ opacity: 0;
+ transform: translateY(20px);
+ transition: 0.5s ease;
 }
 
-/* GALLERY */
+section.show {
+ opacity: 1;
+ transform: translateY(0);
+}
+
+/* ===== GALLERY ===== */
 .gallery {
  display: grid;
  grid-template-columns: repeat(4, 1fr);
@@ -78,16 +116,22 @@ section {
  aspect-ratio: 1/1;
  object-fit: cover;
  border-radius: 6px;
+ transition: 0.25s ease;
 }
 
-/* MOBILE */
+.gallery img:hover,
+.gallery video:hover {
+ transform: scale(1.05);
+}
+
+/* ===== MOBILE ===== */
 @media (max-width: 600px) {
  .gallery {
    grid-template-columns: repeat(3, 1fr);
  }
 }
 
-/* LIGHTBOX */
+/* ===== LIGHTBOX ===== */
 .lightbox {
  position: fixed;
  top: 0;
@@ -104,9 +148,10 @@ section {
 .lightbox img {
  max-width: 90%;
  max-height: 90%;
+ animation: zoomIn 0.25s ease;
 }
 
-/* WHATSAPP FLOAT */
+/* ===== WHATSAPP BUTTON ===== */
 .whatsapp-btn {
  position: fixed;
  bottom: 20px;
@@ -115,6 +160,11 @@ section {
  padding: 14px;
  border-radius: 50%;
  z-index: 1000;
+ transition: 0.3s;
+}
+
+.whatsapp-btn:hover {
+ transform: scale(1.1);
 }
 
 </style>
@@ -159,10 +209,15 @@ section {
 <section>
 <h2>📍 Reach Us</h2>
 
-<p>Karidhya, Pipeline Road, Suri, Birbhum</p>
+<p>Karidhya, Pipeline Road,(Near Ghosh Pukur) Suri, Birbhum</p>
 
-<a href="https://maps.app.goo.gl/jwKa1Lp1Rb7Fymyb7?g_st=aw" target="_blank">
-📍 View Location on Google Maps
+<a href="tel:6294848759">📞 6294848759</a>
+<a href="https://wa.me/916294848759" target="_blank">💬 WhatsApp</a>
+
+<br><br>
+
+<a class="btn" href="https://maps.app.goo.gl/jwKa1Lp1Rb7Fymyb7?g_st=aw" target="_blank">
+📍 Open Location
 </a>
 
 </section>
@@ -179,7 +234,22 @@ section {
 
 <script>
 
-/* IMAGE FULLSCREEN */
+/* SCROLL ANIMATION */
+let sections = document.querySelectorAll("section");
+
+function showSections() {
+ sections.forEach(sec => {
+  let rect = sec.getBoundingClientRect();
+  if (rect.top < window.innerHeight - 80) {
+   sec.classList.add("show");
+  }
+ });
+}
+
+window.addEventListener("scroll", showSections);
+window.addEventListener("load", showSections);
+
+/* IMAGE LIGHTBOX */
 function openLightbox(img) {
  document.getElementById("lightbox").style.display = "flex";
  document.getElementById("lightboxImg").src = img.src;
@@ -192,7 +262,7 @@ function closeLightbox() {
 /* VIDEO FULLSCREEN */
 function openVideo(video) {
  if (video.requestFullscreen) {
-   video.requestFullscreen();
+  video.requestFullscreen();
  }
  video.play();
 }
