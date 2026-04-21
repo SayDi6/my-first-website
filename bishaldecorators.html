@@ -111,14 +111,16 @@ section.show {
 
 /* GALLERY */
 .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
 }
 
-.gallery img, .gallery video {
+.gallery img {
     width: 100%;
-    border-radius: 10px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+}
     transition: 0.3s;
 }
 
