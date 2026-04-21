@@ -237,9 +237,9 @@ section {
         <img src="shilapandel3.jpeg" onclick="openLightbox(this)">
         
         <!-- ADD VIDEO -->
-        <video controls>
-            <source src="shilapandelvideo3.mp4">
-        </video>
+        <video onclick="openVideo(this)">
+    <source src="shilapandelvideo3.mp4">
+  </video>
     </div>
 </section>
 
@@ -286,6 +286,12 @@ window.addEventListener("load", showSections);
 
 function closeLightbox() {
     document.getElementById("lightbox").style.display = "none";
+}
+    function openVideo(video) {
+    if (video.requestFullscreen) {
+        video.requestFullscreen();
+    }
+    video.play();
 }
 </script>
     <div id="lightbox" class="lightbox" onclick="closeLightbox()">
