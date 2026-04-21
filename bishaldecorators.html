@@ -3,7 +3,7 @@
 <head>
 <title>Bishal Decorators</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
 <style>
 
 html {
@@ -14,96 +14,86 @@ body {
  margin: 0;
  font-family: Arial, sans-serif;
  background: #f8f5f2;
- animation: fadeIn 0.6s ease-out;
+ animation: fadeIn 0.8s ease-out;
 }
 
-/* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
- from { opacity: 0; transform: translateY(8px); }
+ from { opacity: 0; transform: translateY(10px); }
  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes gradientMove {
- 0% { background-position: 0% 50%; }
- 50% { background-position: 100% 50%; }
- 100% { background-position: 0% 50%; }
-}
-
-@keyframes slideDown {
- from { transform: translateY(-40px); opacity: 0; }
- to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes zoomIn {
- from { transform: scale(0.85); opacity: 0; }
- to { transform: scale(1); opacity: 1; }
-}
-
-/* ===== HEADER ===== */
+/* HEADER */
 header {
  background: linear-gradient(-45deg, #6b4226, #8b5e3c, #6b4226, #a47148);
  background-size: 300% 300%;
- animation: gradientMove 8s ease infinite, slideDown 0.6s ease;
+ animation: gradientMove 8s ease infinite, slideDown 0.8s ease;
  color: white;
  text-align: center;
- padding: 45px 15px;
+ padding: 60px 20px;
  position: sticky;
  top: 0;
  z-index: 1000;
 }
 
 header h1 {
- font-size: 24px;
+ font-size: 32px;
+ margin: 0;
  letter-spacing: 3px;
- margin-bottom: 8px;
+ text-transform: uppercase;
+
+ background: linear-gradient(90deg, #fff, #ffd9b3, #fff);
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+
+ animation: shineText 4s linear infinite;
 }
 
 header p {
- font-size: 13px;
- opacity: 0.85;
- margin-bottom: 20px;
+ margin-top: 10px;
+ font-size: 14px;
+ opacity: 0.9;
 }
 
-/* ===== BUTTON ===== */
+/* animations */
+@keyframes gradientMove {
+ 0% { background-position: 0% 50%; }
+ 50% { background-position: 100% 50%; }
+ 100% { background-position: 0% 50%; }
+}
+
+@keyframes shineText {
+ 0% { background-position: -200px; }
+ 100% { background-position: 200px; }
+}
+
+/* BUTTON */
 .btn {
- display: block;
- width: 90%;
- margin: 10px auto;
- padding: 14px;
- border-radius: 10px;
- font-size: 14px;
- background: rgba(255,255,255,0.95);
+ background: white;
  color: #6b4226;
+ padding: 12px 20px;
+ border-radius: 8px;
  text-decoration: none;
- transition: 0.25s ease;
+ margin: 6px;
+ display: inline-block;
+ transition: 0.3s;
 }
 
 .btn:hover {
- transform: scale(1.04);
- box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+ transform: scale(1.05);
 }
 
-/* ===== SECTION ===== */
+/* SECTION */
 section {
  max-width: 900px;
- margin: 15px;
+ margin: 25px auto;
  background: white;
- padding: 15px;
+ padding: 20px;
  border-radius: 12px;
  text-align: center;
  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-
- opacity: 0;
- transform: translateY(20px);
- transition: 0.5s ease;
 }
 
-section.show {
- opacity: 1;
- transform: translateY(0);
-}
-
-/* ===== GALLERY ===== */
+/* 🔥 GALLERY FIX (MAIN PART) */
 .gallery {
  display: grid;
  grid-template-columns: repeat(4, 1fr);
@@ -113,10 +103,10 @@ section.show {
 .gallery img,
 .gallery video {
  width: 100%;
- aspect-ratio: 1/1;
+ aspect-ratio: 1 / 1;
  object-fit: cover;
  border-radius: 6px;
- transition: 0.25s ease;
+ transition: 0.3s;
 }
 
 .gallery img:hover,
@@ -124,41 +114,58 @@ section.show {
  transform: scale(1.05);
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 600px) {
- .gallery {
-   grid-template-columns: repeat(3, 1fr);
- }
+/* SERVICES */
+.service {
+ background: #f1f1f1;
+ padding: 12px;
+ margin: 10px 0;
+ border-radius: 8px;
+ transition: 0.3s;
 }
 
-/* ===== LIGHTBOX ===== */
+.service:hover {
+ transform: scale(1.02);
+}
+
+/* CONTACT */
+.contact a {
+ display: block;
+ margin: 8px 0;
+ color: #6b4226;
+ text-decoration: none;
+ font-weight: bold;
+}
+
+/* LIGHTBOX */
 .lightbox {
  position: fixed;
  top: 0;
  left: 0;
  width: 100%;
  height: 100%;
- background: rgba(0,0,0,0.9);
+ background: rgba(0,0,0,0.8);
  display: none;
  justify-content: center;
  align-items: center;
- z-index: 9999;
 }
 
 .lightbox img {
  max-width: 90%;
  max-height: 90%;
- animation: zoomIn 0.25s ease;
+ border-radius: 10px;
 }
 
-/* ===== WHATSAPP BUTTON ===== */
+/* WHATSAPP FLOAT */
 .whatsapp-btn {
  position: fixed;
  bottom: 20px;
  right: 20px;
  background: #25D366;
+ color: white;
+ font-size: 22px;
  padding: 14px;
  border-radius: 50%;
+ text-decoration: none;
  z-index: 1000;
  transition: 0.3s;
 }
@@ -167,107 +174,132 @@ section.show {
  transform: scale(1.1);
 }
 
+/* 📱 MOBILE FIX */
+@media (max-width: 600px) {
+
+ header {
+     padding: 40px 15px;
+ }
+
+ header h1 {
+     font-size: 22px;
+ }
+
+ header p {
+     font-size: 12px;
+ }
+
+ .btn {
+     display: block;
+     width: 85%;
+     margin: 8px auto;
+     font-size: 14px;
+ }
+
+ section {
+     margin: 10px;
+     padding: 15px;
+ }
+
+ /* 🔥 MOBILE GRID FIX */
+ .gallery {
+     grid-template-columns: repeat(3, 1fr);
+ }
+
+ .service {
+     font-size: 13px;
+ }
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>Bishal Decorators</h1>
+    <h1> Bishal Decorators</h1>
 <p>Making Your Events Beautiful</p>
 
-<a class="btn" href="tel:6294848759">📞 Call Now</a>
-<a class="btn" href="https://wa.me/916294848759" target="_blank">💬 WhatsApp</a>
+    <a class="btn" href="tel:6294848759">📞 Call Now</a>
+    <a class="btn" href="https://wa.me/916294848759" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="18">
+    WhatsApp
+    </a>
 </header>
 
 <section>
-<h2>✨ Our Work</h2>
+    <h2>✨ Our Work</h2>
 
-<div class="gallery">
-
-<img src="shilapandel.jpeg" onclick="openLightbox(this)">
-<img src="shilapandel2.jpeg" onclick="openLightbox(this)">
-<img src="shilapandel3.jpeg" onclick="openLightbox(this)">
-
-<video onclick="openVideo(this)">
-<source src="shilapandelvideo3.mp4">
-</video>
-
-</div>
+    <div class="gallery">
+        <!-- ADD YOUR IMAGES HERE -->
+        <img src="shilapandel.jpeg" onclick="openLightbox(this)">
+        <img src="shilapandel2.jpeg" onclick="openLightbox(this)">
+        <img src="shilapandel3.jpeg" onclick="openLightbox(this)">
+        
+        <!-- ADD VIDEO -->
+        <video controls>
+            <source src="shilapandelvideo3.mp4">
+        </video>
+    </div>
 </section>
 
 <section>
-<h2>🎉 Services</h2>
+    <h2>🎉 Services</h2>
 
-<div>Wedding Decoration</div>
-<div>Birthday Decoration</div>
-<div>Stage Decoration</div>
-<div>Event Decoration</div>
-
+    <div class="service">Wedding Decoration</div>
+    <div class="service">Birthday Decoration</div>
+    <div class="service">Stage Decoration</div>
+    <div class="service">Event Decoration</div>
 </section>
 
-<section>
-<h2>📍 Reach Us</h2>
+<section class="contact">
+    <h2>📍 Contact</h2>
 
-<p>Karidhya, Pipeline Road,(Near Ghosh Pukur) Suri, Birbhum</p>
+    <p>Karidhya, Pipeline Road (near Ghosh Pukur), Suri, Birbhum</p>
 
-<a href="tel:6294848759">📞 6294848759</a>
-<a href="https://wa.me/916294848759" target="_blank">💬 WhatsApp</a>
-
-<br><br>
-
-<a class="btn" href="https://maps.app.goo.gl/jwKa1Lp1Rb7Fymyb7?g_st=aw" target="_blank">
-📍 Open Location
-</a>
-
+    <a href="tel:6294848759">📞 6294848759</a>
+    <a href="https://wa.me/916294848759" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="18">
+    WhatsApp
+    </a>
 </section>
-
-<!-- LIGHTBOX -->
-<div id="lightbox" class="lightbox" onclick="closeLightbox()">
-<img id="lightboxImg">
-</div>
-
-<!-- FLOAT BUTTON -->
-<a href="https://wa.me/916294848759" target="_blank" class="whatsapp-btn">
-<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
-</a>
-
+    
 <script>
-
-/* SCROLL ANIMATION */
 let sections = document.querySelectorAll("section");
 
 function showSections() {
- sections.forEach(sec => {
-  let rect = sec.getBoundingClientRect();
-  if (rect.top < window.innerHeight - 80) {
-   sec.classList.add("show");
-  }
- });
+    sections.forEach(sec => {
+        let rect = sec.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight - 100) {
+            sec.classList.add("show");
+        }
+    });
 }
 
 window.addEventListener("scroll", showSections);
 window.addEventListener("load", showSections);
-
-/* IMAGE LIGHTBOX */
-function openLightbox(img) {
- document.getElementById("lightbox").style.display = "flex";
- document.getElementById("lightboxImg").src = img.src;
+    function openLightbox(img) {
+    document.getElementById("lightbox").style.display = "flex";
+    document.getElementById("lightboxImg").src = img.src;
 }
 
 function closeLightbox() {
- document.getElementById("lightbox").style.display = "none";
+    document.getElementById("lightbox").style.display = "none";
 }
-
-/* VIDEO FULLSCREEN */
-function openVideo(video) {
- if (video.requestFullscreen) {
-  video.requestFullscreen();
- }
- video.play();
-}
-
 </script>
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg">
+</div>
+    <a href="https://wa.me/916294848759" target="_blank" class="whatsapp-btn">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
+  </a>
+    </section>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/916294848759" target="_blank" class="whatsapp-btn">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
+</a>
 
 </body>
 </html>
