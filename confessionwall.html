@@ -126,7 +126,6 @@ async function loadConfessions() {
 
       const div = document.createElement("div");
 
-      // 🎨 Card styling
       div.style.background = "#1e293b";
       div.style.padding = "15px";
       div.style.marginBottom = "12px";
@@ -135,7 +134,7 @@ async function loadConfessions() {
       div.innerHTML = `
         <p style="font-size:16px;"><b>#${actualIndex}</b> ${c[0]}</p>
         <small>Tips: ${ethers.utils.formatEther(c[2])} ETH</small>
-        <br><br>
+      `;
 
       list.appendChild(div);
     });
