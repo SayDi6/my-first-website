@@ -125,20 +125,29 @@ async function loadConfessions() {
     const total = await readContract.getTotalConfessions();
 
     const list = document.getElementById("confessionList");
+    list.innerHTML = "Loading... ⏳";
+
+    // 🔥 Create all calls at once
+    const promises = [];
+    for (let i = 0; i < total; i++) {
+      promises.push(readContract.confessions(i));
+    }
+
+    // 🔥 Wait all together (FAST)
+    const results = await Promise.all(promises);
+
     list.innerHTML = "";
 
-    for (let i = 0; i < total; i++) {
-      const c = await readContract.confessions(i);
-
+    results.reverse().forEach((c, i) => {
       const div = document.createElement("div");
       div.innerHTML = `
         <p><b>#${i}</b> ${c[0]}</p>
         <small>Tips: ${ethers.utils.formatEther(c[2])} ETH</small>
         <hr>
       `;
-
       list.appendChild(div);
-    }
+    });
+
   } catch (err) {
     console.error("Load failed:", err);
   }
