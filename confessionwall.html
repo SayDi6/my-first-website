@@ -35,24 +35,38 @@ const abi = [
 
 // ✅ Correct wallet connect
 async function connectWallet() {
-  if (typeof window.ethereum === "undefined") {
-    alert("MetaMask not installed!");
+  if (!window.ethereum) {
+    alert("Please install MetaMask");
     return;
   }
 
   try {
+    // Request account access
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+
     provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
+
+    // 🔥 FORCE SWITCH TO BASE MAINNET
+    try {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x2105" }] // Base Mainnet
+      });
+    } catch (switchError) {
+      alert("Please manually switch to Base network");
+      throw switchError;
+    }
+
     contract = new ethers.Contract(contractAddress, abi, signer);
 
     alert("Wallet Connected ✅");
+
   } catch (err) {
     console.error(err);
-    alert("Connection failed ❌");
+    alert(err.message);
   }
 }
-
 // ✅ FIXED function
 async function postConfession() {
   const msg = document.getElementById("message").value;
