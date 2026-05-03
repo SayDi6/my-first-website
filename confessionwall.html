@@ -105,8 +105,25 @@ async function tipOwner() {
   alert("Thanks for the tip ❤️");
 }
   function formatTime(ts) {
-  const date = new Date(ts * 1000);
-  return date.toLocaleString();
+  const now = Math.floor(Date.now() / 1000);
+  const diff = now - ts;
+
+  if (diff < 60) return "Just now";
+
+  const units = [
+    { s: 31536000, name: "year" },
+    { s: 2592000, name: "month" },
+    { s: 86400, name: "day" },
+    { s: 3600, name: "hour" },
+    { s: 60, name: "min" }
+  ];
+
+  for (let u of units) {
+    const val = Math.floor(diff / u.s);
+    if (val >= 1) {
+      return val + " " + u.name + (val > 1 ? "s ago" : " ago");
+    }
+  }
 }
 // 🔥 Load Confessions (fast + UI)
 async function loadConfessions() {
