@@ -166,11 +166,10 @@ async function loadConfessions() {
       div.style.borderRadius = "10px";
 
       div.innerHTML = `
-        <p><b>#${actualIndex}</b> ${c[0]}</p>
-        <small>${formatTime(c[1])}</small><br>
-        <small>Tips: ${ethers.utils.formatEther(c[2])} ETH</small>
-        ${i === 0 && Number(c[2]) > 0 ? "<br><b>🔥 Spotlight</b>" : ""}
-      `;
+     <p><b>#${actualIndex}</b> ${c[0]}</p>
+     <small>${formatTime(c[1])}</small>
+     ${i === 0 && Number(c[2]) > 0 ? "<br><b>🔥 Spotlight</b>" : ""}
+    `;
 
       list.appendChild(div);
     });
