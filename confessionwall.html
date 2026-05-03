@@ -3,26 +3,24 @@
 <head>
   <title>Anonymous Confession Wall</title>
 </head>
-<body>
+
+<body style="font-family: Arial; background:#0f172a; color:white; padding:20px;">
 
 <h2>🕵️ Anonymous Confession Wall</h2>
 
-<button onclick="connectWallet()">Connect Wallet</button>
+<button onclick="connectWallet()" style="padding:8px 12px;">Connect Wallet</button>
 
 <br><br>
 
-<input id="message" placeholder="Write your confession..." />
-<button onclick="postConfession()">Post (gas fee required)</button>
+<input id="message" placeholder="Write your confession..." style="padding:10px; width:250px;" />
+<button onclick="postConfession()" style="padding:10px;">Post</button>
 
 <br><br>
-
-<input id="tipIndex" placeholder="Confession index" />
-<button onclick="tip()">Tip ❤️</button>
 
 <h3>📜 Confessions</h3>
 <div id="confessionList"></div>
 
-<!-- ✅ Stable ethers CDN -->
+<!-- ethers -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
 <script>
@@ -39,38 +37,32 @@ let provider;
 let signer;
 let contract;
 
-// ✅ Public provider (no wallet needed)
-let readProvider = new ethers.providers.JsonRpcProvider("https://mainnet.base.org");
-let readContract = new ethers.Contract(contractAddress, abi, readProvider);
+// 🌐 Public read provider
+const readProvider = new ethers.providers.JsonRpcProvider("https://mainnet.base.org");
+const readContract = new ethers.Contract(contractAddress, abi, readProvider);
 
 // 🔹 Connect Wallet
 async function connectWallet() {
   if (!window.ethereum) {
-    alert("Please install MetaMask");
+    alert("Install MetaMask");
     return;
   }
 
-  try {
-    await window.ethereum.request({ method: "eth_requestAccounts" });
+  await window.ethereum.request({ method: "eth_requestAccounts" });
 
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    signer = provider.getSigner();
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+  signer = provider.getSigner();
 
-    await window.ethereum.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x2105" }]
-    });
+  await window.ethereum.request({
+    method: "wallet_switchEthereumChain",
+    params: [{ chainId: "0x2105" }]
+  });
 
-    contract = new ethers.Contract(contractAddress, abi, signer);
+  contract = new ethers.Contract(contractAddress, abi, signer);
 
-    alert("Wallet Connected ✅");
+  alert("Wallet Connected ✅");
 
-    await loadConfessions();
-
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
+  await loadConfessions();
 }
 
 // 🔹 Post
@@ -92,34 +84,29 @@ async function postConfession() {
   });
 
   await tx.wait();
-  alert("Confession Posted!");
 
-  // ✅ Clear AFTER posting
   document.getElementById("message").value = "";
 
   await loadConfessions();
 }
 
-// 🔹 Tip
-async function tip() {
+// ❤️ Direct Tip
+async function tipDirect(index) {
   if (!contract) {
     alert("Connect wallet first");
     return;
   }
-
-  const index = document.getElementById("tipIndex").value;
 
   const tx = await contract.tipConfession(index, {
     value: ethers.utils.parseEther("0.00001")
   });
 
   await tx.wait();
-  alert("Tipped!");
 
   await loadConfessions();
 }
 
-// 🔥 Load (PUBLIC — no wallet needed)
+// 🔥 Load Confessions (fast + UI)
 async function loadConfessions() {
   try {
     const total = await readContract.getTotalConfessions();
@@ -127,33 +114,44 @@ async function loadConfessions() {
     const list = document.getElementById("confessionList");
     list.innerHTML = "Loading... ⏳";
 
-    // 🔥 Create all calls at once
     const promises = [];
     for (let i = 0; i < total; i++) {
       promises.push(readContract.confessions(i));
     }
 
-    // 🔥 Wait all together (FAST)
     const results = await Promise.all(promises);
 
     list.innerHTML = "";
 
     results.reverse().forEach((c, i) => {
-  const actualIndex = total - 1 - i;
+      const actualIndex = total - 1 - i;
 
-  const div = document.createElement("div");
-  div.innerHTML = `
-    <p><b>#${actualIndex}</b> ${c[0]}</p>
-    <small>Tips: ${ethers.utils.formatEther(c[2])} ETH</small>
-    <hr>
-  `;
-  list.appendChild(div);
-});
+      const div = document.createElement("div");
+
+      // 🎨 Card styling
+      div.style.background = "#1e293b";
+      div.style.padding = "15px";
+      div.style.marginBottom = "12px";
+      div.style.borderRadius = "10px";
+
+      div.innerHTML = `
+        <p style="font-size:16px;"><b>#${actualIndex}</b> ${c[0]}</p>
+        <small>Tips: ${ethers.utils.formatEther(c[2])} ETH</small>
+        <br><br>
+        <button onclick="tipDirect(${actualIndex})" style="padding:6px 10px;">
+          ❤️ Tip
+        </button>
+      `;
+
+      list.appendChild(div);
+    });
+
   } catch (err) {
-    console.error("Load failed:", err);
+    console.error(err);
   }
 }
-// 🔁 Auto connect (optional)
+
+// 🔁 Auto connect
 async function autoConnect() {
   if (!window.ethereum) return;
 
@@ -164,7 +162,6 @@ async function autoConnect() {
     signer = provider.getSigner();
 
     const network = await provider.getNetwork();
-
     if (network.chainId !== 8453) return;
 
     contract = new ethers.Contract(contractAddress, abi, signer);
@@ -179,9 +176,9 @@ if (window.ethereum) {
   window.ethereum.on("chainChanged", () => window.location.reload());
 }
 
-// 🔁 Load on page start (IMPORTANT)
+// 🚀 Start
 window.onload = async () => {
-  await loadConfessions(); // 👈 now works without wallet
+  await loadConfessions();
   await autoConnect();
 };
 </script>
