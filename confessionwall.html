@@ -19,6 +19,10 @@
 <input id="tipIndex" placeholder="Confession index" />
 <button onclick="tip()">Tip ❤️</button>
 
+<h3>📜 Confessions</h3>
+<div id="confessionList"></div>
+
+<!-- ✅ Stable ethers CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
 <script>
@@ -30,10 +34,12 @@ const contractAddress = "0x4f1ab8fcc85aaa20ffe3105add56b2d2185aa3db";
 
 const abi = [
   "function postConfession(string memory _message) payable",
-  "function tipConfession(uint256 index) payable"
+  "function tipConfession(uint256 index) payable",
+  "function getTotalConfessions() view returns (uint256)",
+  "function confessions(uint256) view returns (string memory, uint256, uint256)"
 ];
 
-// ✅ Correct wallet connect
+// 🔹 Connect Wallet
 async function connectWallet() {
   if (!window.ethereum) {
     alert("Please install MetaMask");
@@ -41,35 +47,43 @@ async function connectWallet() {
   }
 
   try {
-    // Request account access
     await window.ethereum.request({ method: "eth_requestAccounts" });
 
     provider = new ethers.providers.Web3Provider(window.ethereum);
     signer = provider.getSigner();
 
-    // 🔥 FORCE SWITCH TO BASE MAINNET
+    // Switch to Base Mainnet
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x2105" }] // Base Mainnet
+        params: [{ chainId: "0x2105" }]
       });
-    } catch (switchError) {
-      alert("Please manually switch to Base network");
-      throw switchError;
+    } catch (err) {
+      alert("Please switch to Base network manually");
+      return;
     }
 
     contract = new ethers.Contract(contractAddress, abi, signer);
 
     alert("Wallet Connected ✅");
 
+    // ✅ Load confessions after connect
+    await loadConfessions();
+
   } catch (err) {
     console.error(err);
     alert(err.message);
   }
 }
-// ✅ FIXED function
+
+// 🔹 Post Confession
 async function postConfession() {
   const msg = document.getElementById("message").value;
+
+  if (!msg) {
+    alert("Write something first");
+    return;
+  }
 
   const tx = await contract.postConfession(msg, {
     value: ethers.utils.parseEther("0.00001")
@@ -77,9 +91,12 @@ async function postConfession() {
 
   await tx.wait();
   alert("Confession Posted!");
+
+  // ✅ Refresh list
+  await loadConfessions();
 }
 
-// ✅ Tip function
+// 🔹 Tip
 async function tip() {
   const index = document.getElementById("tipIndex").value;
 
@@ -89,6 +106,30 @@ async function tip() {
 
   await tx.wait();
   alert("Tipped!");
+
+  // ✅ Refresh list
+  await loadConfessions();
+}
+
+// 🔥 Load all confessions
+async function loadConfessions() {
+  const total = await contract.getTotalConfessions();
+
+  const list = document.getElementById("confessionList");
+  list.innerHTML = "";
+
+  for (let i = 0; i < total; i++) {
+    const c = await contract.confessions(i);
+
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <p><b>#${i}</b> ${c[0]}</p>
+      <small>Tips: ${ethers.utils.formatEther(c[2])} ETH</small>
+      <hr>
+    `;
+
+    list.appendChild(div);
+  }
 }
 </script>
 
