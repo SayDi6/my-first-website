@@ -104,6 +104,10 @@ async function tipOwner() {
 
   alert("Thanks for the tip ❤️");
 }
+  function formatTime(ts) {
+  const date = new Date(ts * 1000);
+  return date.toLocaleString();
+}
 // 🔥 Load Confessions (fast + UI)
 async function loadConfessions() {
   try {
@@ -119,21 +123,36 @@ async function loadConfessions() {
 
     const results = await Promise.all(promises);
 
+    // 🔥 Sort by tips (premium feel)
+    const sorted = results
+      .map((c, i) => ({ data: c, index: i }))
+      .sort((a, b) => b.data[2] - a.data[2]);
+
     list.innerHTML = "";
 
-    results.reverse().forEach((c, i) => {
-      const actualIndex = total - 1 - i;
+    sorted.forEach((item, i) => {
+      const c = item.data;
+      const actualIndex = item.index;
 
       const div = document.createElement("div");
 
-      div.style.background = "#1e293b";
+      // 🌟 Highlight top confession
+      if (i === 0 && Number(c[2]) > 0) {
+        div.style.background = "linear-gradient(135deg, #facc15, #f97316)";
+        div.style.color = "black";
+      } else {
+        div.style.background = "#1e293b";
+      }
+
       div.style.padding = "15px";
       div.style.marginBottom = "12px";
       div.style.borderRadius = "10px";
 
       div.innerHTML = `
-        <p style="font-size:16px;"><b>#${actualIndex}</b> ${c[0]}</p>
+        <p><b>#${actualIndex}</b> ${c[0]}</p>
+        <small>${formatTime(c[1])}</small><br>
         <small>Tips: ${ethers.utils.formatEther(c[2])} ETH</small>
+        ${i === 0 && Number(c[2]) > 0 ? "<br><b>🔥 Spotlight</b>" : ""}
       `;
 
       list.appendChild(div);
