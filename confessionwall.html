@@ -25,6 +25,8 @@
 <!-- ✅ Stable ethers CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
 <script>
 let provider;
 let signer;
@@ -52,7 +54,7 @@ async function connectWallet() {
     provider = new ethers.providers.Web3Provider(window.ethereum);
     signer = provider.getSigner();
 
-    // Switch to Base Mainnet
+    // ✅ Switch to Base Mainnet
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
@@ -67,7 +69,6 @@ async function connectWallet() {
 
     alert("Wallet Connected ✅");
 
-    // ✅ Load confessions after connect
     await loadConfessions();
 
   } catch (err) {
@@ -78,6 +79,11 @@ async function connectWallet() {
 
 // 🔹 Post Confession
 async function postConfession() {
+  if (!contract) {
+    alert("Connect wallet first");
+    return;
+  }
+
   const msg = document.getElementById("message").value;
 
   if (!msg) {
@@ -92,12 +98,16 @@ async function postConfession() {
   await tx.wait();
   alert("Confession Posted!");
 
-  // ✅ Refresh list
   await loadConfessions();
 }
 
 // 🔹 Tip
 async function tip() {
+  if (!contract) {
+    alert("Connect wallet first");
+    return;
+  }
+
   const index = document.getElementById("tipIndex").value;
 
   const tx = await contract.tipConfession(index, {
@@ -107,12 +117,13 @@ async function tip() {
   await tx.wait();
   alert("Tipped!");
 
-  // ✅ Refresh list
   await loadConfessions();
 }
 
 // 🔥 Load all confessions
 async function loadConfessions() {
+  if (!contract) return;
+
   const total = await contract.getTotalConfessions();
 
   const list = document.getElementById("confessionList");
@@ -131,6 +142,41 @@ async function loadConfessions() {
     list.appendChild(div);
   }
 }
+
+// 🔁 Auto Connect (on refresh)
+async function autoConnect() {
+  if (!window.ethereum) return;
+
+  const accounts = await window.ethereum.request({ method: "eth_accounts" });
+
+  if (accounts.length > 0) {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    signer = provider.getSigner();
+
+    const network = await provider.getNetwork();
+
+    // ✅ Only load if on Base Mainnet
+    if (network.chainId !== 8453) {
+      console.log("Wrong network");
+      return;
+    }
+
+    contract = new ethers.Contract(contractAddress, abi, signer);
+
+    console.log("Auto connected ✅");
+
+    await loadConfessions();
+  }
+}
+
+// 🔁 React to account change
+if (window.ethereum) {
+  window.ethereum.on("accountsChanged", autoConnect);
+  window.ethereum.on("chainChanged", () => window.location.reload());
+}
+
+// 🔁 Run on page load
+window.onload = autoConnect;
 </script>
 
 </body>
