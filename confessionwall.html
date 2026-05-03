@@ -12,7 +12,7 @@
 <br><br>
 
 <input id="message" placeholder="Write your confession..." />
-<button onclick="postConfession()">Post (small fee)</button>
+<button onclick="postConfession()">Post (gas fee required)</button>
 
 <br><br>
 
@@ -28,20 +28,32 @@ let contract;
 
 const contractAddress = "0x4f1ab8fcc85aaa20ffe3105add56b2d2185aa3db";
 
-// ABI (simplified)
 const abi = [
   "function postConfession(string memory _message) payable",
   "function tipConfession(uint256 index) payable"
 ];
 
+// ✅ Correct wallet connect
 async function connectWallet() {
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
-  signer = provider.getSigner();
-  contract = new ethers.Contract(contractAddress, abi, signer);
-  alert("Wallet Connected");
+  if (typeof window.ethereum === "undefined") {
+    alert("MetaMask not installed!");
+    return;
+  }
+
+  try {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    contract = new ethers.Contract(contractAddress, abi, signer);
+
+    alert("Wallet Connected ✅");
+  } catch (err) {
+    console.error(err);
+    alert("Connection failed ❌");
+  }
 }
 
+// ✅ FIXED function
 async function postConfession() {
   const msg = document.getElementById("message").value;
 
@@ -53,6 +65,7 @@ async function postConfession() {
   alert("Confession Posted!");
 }
 
+// ✅ Tip function
 async function tip() {
   const index = document.getElementById("tipIndex").value;
 
