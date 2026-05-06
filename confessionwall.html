@@ -381,30 +381,66 @@ async function loadConfessions() {
 
       div.onclick = () => {
 
-        revealed = !revealed;
+  revealed = !revealed;
 
-        if (revealed) {
+  // 🔓 OPEN
+  if (revealed) {
 
-          div.innerHTML = `
-            <div>
-              <p style="
-                font-size:13px;
-                margin:0;
-                word-break:break-word;
-              ">
-                ${c[0]}
-              </p>
+    // 💥 burst first
+    div.style.animation =
+      "burstBubble 0.35s ease";
 
-              <br>
+    setTimeout(() => {
 
-              <small style="
-                opacity:0.8;
-                font-size:10px;
-              ">
-                ${formatTime(c[1])}
-              </small>
-            </div>
-          `;
+      div.style.animation =
+        `floatBubble ${Math.random() * 4 + 4}s ease-in-out infinite`;
+
+      div.innerHTML = `
+        <div style="
+          padding:10px;
+          color:#111827;
+        ">
+          <p style="
+            font-size:13px;
+            margin:0;
+            word-break:break-word;
+            line-height:1.4;
+          ">
+            ${c[0]}
+          </p>
+
+          <br>
+
+          <small style="
+            opacity:0.7;
+            font-size:10px;
+          ">
+            ${formatTime(c[1])}
+          </small>
+        </div>
+      `;
+
+    }, 250);
+
+  }
+
+  // 🔒 CLOSE
+  else {
+
+    div.innerHTML = `
+      <div style="
+        width:12px;
+        height:12px;
+        border-radius:50%;
+        background:rgba(255,255,255,0.7);
+        box-shadow:
+          0 0 10px rgba(59,130,246,0.5),
+          0 0 18px rgba(168,85,247,0.25);
+      ">
+      </div>
+    `;
+  }
+};
 
         } else {
 
