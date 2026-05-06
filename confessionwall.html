@@ -218,12 +218,14 @@ async function loadConfessions() {
       // 🫧 Floating position
       div.style.position = "absolute";
 
+      const maxX = window.innerWidth - size - 40;
+      const maxY = window.innerHeight - size - 40;
+
       div.style.left =
-        Math.random() * 80 + "vw";
+      Math.random() * maxX + "px";
 
-      div.style.top =
-        Math.random() * 70 + "vh";
-
+       div.style.top =
+       Math.random() * maxY + "px";
       // 🫧 Bubble appearance
       div.style.borderRadius = "50%";
 
