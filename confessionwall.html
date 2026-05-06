@@ -67,7 +67,7 @@
       }
     }
 
-    /* 💥 Burst */
+    /* 💥 Burst animation */
     @keyframes burstBubble {
 
       0% {
@@ -89,6 +89,7 @@
       }
     }
 
+    /* ✨ Text fade */
     @keyframes fadeIn {
 
       from {
@@ -275,7 +276,7 @@
 
     messageInput.addEventListener("input", () => {
 
-      // ✂️ stop at 125
+      // ✂️ Hard stop at 125
       if (
         messageInput.value.length > 125
       ) {
@@ -304,7 +305,7 @@
           "#eab308";
       }
 
-      // 🔴 limit reached
+      // 🔴 limit
       else {
 
         charCounter.style.color =
@@ -345,7 +346,7 @@
         return;
       }
 
-      // 🧼 Clean
+      // 🧼 Clean message
       const cleanedMsg =
         normalizeMessage(msg);
 
@@ -380,7 +381,7 @@
         return;
       }
 
-      // 🚫 Duplicate
+      // 🚫 Duplicate prevention
       let recentPosts =
         JSON.parse(
           localStorage.getItem("recentPosts")
@@ -427,7 +428,7 @@
 
         document.getElementById("message").value = "";
 
-        charCounter.innerText = "0 / 200";
+        charCounter.innerText = "0 / 125";
         charCounter.style.color = "#64748b";
 
         await loadConfessions();
@@ -439,7 +440,7 @@
       }
     }
 
-    // ⏱ Time
+    // ⏱ Time formatter
     function formatTime(ts) {
 
       const now =
@@ -539,9 +540,31 @@
           const div =
             document.createElement("div");
 
-          // 🫧 Random size
-          const size =
-            Math.floor(Math.random() * 50) + 70;
+          // 🫧 Dynamic bubble size
+          const textLength = c[0].length;
+
+          let size;
+
+          // short thoughts
+          if (textLength < 40) {
+
+            size =
+              Math.floor(Math.random() * 25) + 70;
+          }
+
+          // medium thoughts
+          else if (textLength < 80) {
+
+            size =
+              Math.floor(Math.random() * 30) + 95;
+          }
+
+          // longer thoughts
+          else {
+
+            size =
+              Math.floor(Math.random() * 35) + 120;
+          }
 
           div.style.width = size + "px";
           div.style.height = size + "px";
@@ -593,7 +616,7 @@
           div.style.left = x + "px";
           div.style.top = y + "px";
 
-          // 🫧 Bubble look
+          // 🫧 Bubble style
           div.style.borderRadius = "50%";
 
           div.style.display = "flex";
@@ -604,7 +627,7 @@
 
           div.style.cursor = "pointer";
 
-          div.style.padding = "15px";
+          div.style.padding = "12px";
 
           div.style.background = `
             radial-gradient(
@@ -674,10 +697,10 @@
                     animation: fadeIn 0.5s ease;
                   ">
                     <p style="
-                      font-size:13px;
+                      font-size:12px;
                       margin:0;
                       word-break:break-word;
-                      line-height:1.4;
+                      line-height:1.3;
                     ">
                       ${c[0]}
                     </p>
@@ -716,6 +739,7 @@
                     div.innerHTML = "";
 
                   }, 6000);
+
                 }
 
               }, 35000);
