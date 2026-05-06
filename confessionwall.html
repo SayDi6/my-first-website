@@ -28,7 +28,7 @@
       overflow: hidden;
     }
 
-    /* 🫧 Floating bubble movement */
+    /* 🫧 Floating movement */
     @keyframes floatBubble {
 
       0% {
@@ -67,7 +67,7 @@
       }
     }
 
-    /* 💥 Bubble burst */
+    /* 💥 Burst */
     @keyframes burstBubble {
 
       0% {
@@ -89,7 +89,6 @@
       }
     }
 
-    /* ✨ Smooth text fade */
     @keyframes fadeIn {
 
       from {
@@ -176,7 +175,7 @@
         readProvider
       );
 
-    // 🔹 Connect Wallet
+    // 🔹 Connect wallet
     async function connectWallet() {
 
       if (!window.ethereum) {
@@ -246,7 +245,7 @@
       "genocide"
     ];
 
-    // 🧼 Normalize text
+    // 🧼 Normalize
     function normalizeMessage(text) {
 
       return text
@@ -276,21 +275,40 @@
 
     messageInput.addEventListener("input", () => {
 
+      // ✂️ stop at 200
+      if (
+        messageInput.value.length > 200
+      ) {
+
+        messageInput.value =
+          messageInput.value.slice(0, 200);
+      }
+
       const length =
         messageInput.value.length;
 
       charCounter.innerText =
         `${length} / 200`;
 
-      if (length > 180) {
-
-        charCounter.style.color =
-          "#ef4444";
-
-      } else {
+      // ⚪ normal
+      if (length < 180) {
 
         charCounter.style.color =
           "#64748b";
+      }
+
+      // 🟡 warning
+      else if (length < 200) {
+
+        charCounter.style.color =
+          "#eab308";
+      }
+
+      // 🔴 limit reached
+      else {
+
+        charCounter.style.color =
+          "#ef4444";
       }
     });
 
@@ -314,16 +332,6 @@
         return;
       }
 
-      // ✍️ Character limit
-      if (msg.length > 200) {
-
-        alert(
-          "Maximum 200 characters allowed"
-        );
-
-        return;
-      }
-
       // 🌍 English only
       const englishOnly =
         /^[a-zA-Z0-9\s.,!?'"()-]+$/;
@@ -337,11 +345,11 @@
         return;
       }
 
-      // 🧼 Clean message
+      // 🧼 Clean
       const cleanedMsg =
         normalizeMessage(msg);
 
-      // 🚨 Block banned words
+      // 🚨 Block words
       for (const word of blockedWords) {
 
         if (cleanedMsg.includes(word)) {
@@ -372,7 +380,7 @@
         return;
       }
 
-      // 🚫 Duplicate prevention
+      // 🚫 Duplicate
       let recentPosts =
         JSON.parse(
           localStorage.getItem("recentPosts")
@@ -405,7 +413,7 @@
           now
         );
 
-        // 💾 Save recent posts
+        // 💾 Save recent
         recentPosts.push(cleanedMsg);
 
         if (recentPosts.length > 5) {
@@ -420,6 +428,7 @@
         document.getElementById("message").value = "";
 
         charCounter.innerText = "0 / 200";
+        charCounter.style.color = "#64748b";
 
         await loadConfessions();
 
@@ -430,7 +439,7 @@
       }
     }
 
-    // ⏱ Time formatter
+    // ⏱ Time
     function formatTime(ts) {
 
       const now =
@@ -497,23 +506,20 @@
         list.innerHTML = "";
 
         const promises = [];
+
         const randomIndexes = new Set();
 
         const batchSize =
           Math.min(50, total);
 
         while (
-          randomIndexes.length < batchSize
+          randomIndexes.size < batchSize
         ) {
 
           const randomIndex =
             Math.floor(Math.random() * total);
 
-          if (
-            !randomIndexes.includes(randomIndex)
-          ) {
-            randomIndexes.add(randomIndex);
-          }
+          randomIndexes.add(randomIndex);
         }
 
         for (const i of randomIndexes) {
@@ -533,7 +539,7 @@
           const div =
             document.createElement("div");
 
-          // 🫧 Bubble size
+          // 🫧 Random size
           const size =
             Math.floor(Math.random() * 50) + 70;
 
@@ -587,7 +593,7 @@
           div.style.left = x + "px";
           div.style.top = y + "px";
 
-          // 🫧 Bubble style
+          // 🫧 Bubble look
           div.style.borderRadius = "50%";
 
           div.style.display = "flex";
@@ -601,13 +607,13 @@
           div.style.padding = "15px";
 
           div.style.background = `
-          radial-gradient(
-            circle at 30% 30%,
-            rgba(255,255,255,0.55),
-            rgba(191,219,254,0.22),
-            rgba(147,197,253,0.08),
-            rgba(255,255,255,0.03)
-          )
+            radial-gradient(
+              circle at 30% 30%,
+              rgba(255,255,255,0.55),
+              rgba(191,219,254,0.22),
+              rgba(147,197,253,0.08),
+              rgba(255,255,255,0.03)
+            )
           `;
 
           div.style.backdropFilter =
@@ -650,7 +656,7 @@
 
             revealed = !revealed;
 
-            // 🔓 OPEN
+            // 🔓 Open
             if (revealed) {
 
               div.style.animation =
@@ -689,7 +695,7 @@
 
               }, 250);
 
-              // ⏳ Auto fade after reading
+              // ⏳ Fade away
               setTimeout(() => {
 
                 if (revealed) {
@@ -704,6 +710,7 @@
                     revealed = false;
 
                     div.style.opacity = "1";
+
                     div.style.transition = "0.3s";
 
                     div.innerHTML = "";
@@ -714,7 +721,7 @@
               }, 35000);
             }
 
-            // 🔒 CLOSE
+            // 🔒 Close
             else {
 
               div.style.animation =
