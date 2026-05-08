@@ -89,7 +89,6 @@
       }
     }
 
-    /* ✨ Text fade */
     @keyframes fadeIn {
 
       from {
@@ -106,7 +105,7 @@
 
 <body>
 
-  <h2> Anonymous Confession Wall</h2>
+  <h2>🕵️ Anonymous Confession Wall</h2>
 
   <button
     onclick="connectWallet()"
@@ -145,10 +144,16 @@
 
   <div id="confessionList"></div>
 
-  <!-- ethers -->
+  <!-- ✅ Ethers -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+  <!-- ✅ Web3Modal -->
   <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
 
+  <!-- ✅ WalletConnect -->
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+
+  <!-- ✅ Coinbase/Base Wallet -->
   <script src="https://unpkg.com/@coinbase/wallet-sdk@3.9.3/dist/CoinbaseWalletSDK.min.js"></script>
 
   <script>
@@ -165,6 +170,7 @@
     let provider;
     let signer;
     let contract;
+
     let connectingWallet = false;
 
     // 🌐 Public provider
@@ -180,101 +186,119 @@
         readProvider
       );
 
-    // 🔹 Connect Wallet with popup selector
-async function connectWallet() {
+    // 🔹 Connect Wallet
+    async function connectWallet() {
 
-  if (connectingWallet) return;
+      if (connectingWallet) return;
 
-  connectingWallet = true;
+      connectingWallet = true;
 
-  try {
+      try {
 
-    const providerOptions = {
+        const providerOptions = {
 
-  walletconnect: {
+          walletconnect: {
 
-    package: window.WalletConnectProvider.default,
+            package:
+              window.WalletConnectProvider.default,
 
-    options: {
+            options: {
 
-      rpc: {
-        8453: "https://mainnet.base.org"
-      },
+              rpc: {
+                8453:
+                  "https://mainnet.base.org"
+              },
 
-      chainId: 8453
+              chainId: 8453
+            }
+          },
+
+          coinbasewalletsdk: {
+
+            package:
+              window.CoinbaseWalletSDK,
+
+            display: {
+
+              logo:
+                "https://avatars.githubusercontent.com/u/1885080?s=280&v=4",
+
+              name:
+                "Base Wallet",
+
+              description:
+                "Connect with Base Wallet"
+            },
+
+            options: {
+
+              appName:
+                "Anonymous Confession Wall",
+
+              rpc:
+                "https://mainnet.base.org",
+
+              chainId: 8453,
+
+              darkMode: true
+            }
+          }
+        };
+
+        const web3Modal =
+          new window.Web3Modal.default({
+
+            cacheProvider: false,
+
+            providerOptions,
+
+            theme: "dark"
+          });
+
+        // 🪄 Open popup
+        const connection =
+          await web3Modal.connect();
+
+        provider =
+          new ethers.providers.Web3Provider(connection);
+
+        signer =
+          provider.getSigner();
+
+        const network =
+          await provider.getNetwork();
+
+        // 🔄 Switch Base Mainnet
+        if (network.chainId !== 8453) {
+
+          await provider.send(
+            "wallet_switchEthereumChain",
+            [{ chainId: "0x2105" }]
+          );
+        }
+
+        contract =
+          new ethers.Contract(
+            contractAddress,
+            abi,
+            signer
+          );
+
+        alert("Wallet Connected ✅");
+
+      } catch (err) {
+
+        console.error(err);
+
+        alert(
+          "Wallet connection cancelled or failed"
+        );
+
+      } finally {
+
+        connectingWallet = false;
+      }
     }
-  },
-
-  coinbasewallet: {
-
-    package: window.CoinbaseWalletSDK,
-
-    options: {
-
-      appName: "Anonymous Confession Wall",
-
-      rpc: "https://mainnet.base.org",
-
-      chainId: 8453,
-
-      darkMode: true
-    }
-  }
-};
-
-    const web3Modal =
-      new window.Web3Modal.default({
-
-        cacheProvider: false,
-
-        providerOptions,
-
-        theme: "dark"
-      });
-
-    // 🪄 THIS opens popup selector
-    const connection =
-      await web3Modal.connect();
-
-    provider =
-      new ethers.providers.Web3Provider(connection);
-
-    signer = provider.getSigner();
-
-    const network =
-      await provider.getNetwork();
-
-    // 🔄 Switch Base
-    if (network.chainId !== 8453) {
-
-      await provider.send(
-        "wallet_switchEthereumChain",
-        [{ chainId: "0x2105" }]
-      );
-    }
-
-    contract =
-      new ethers.Contract(
-        contractAddress,
-        abi,
-        signer
-      );
-
-    alert("Wallet Connected ✅");
-
-  } catch (err) {
-
-    console.error(err);
-
-    alert(
-      "Wallet connection cancelled or failed"
-    );
-
-  } finally {
-
-    connectingWallet = false;
-  }
-}
 
     // 🚨 Blocked words
     const blockedWords = [
@@ -335,7 +359,7 @@ async function connectWallet() {
 
     messageInput.addEventListener("input", () => {
 
-      // ✂️ Hard stop at 125
+      // ✂️ stop at 125
       if (
         messageInput.value.length > 125
       ) {
@@ -405,14 +429,16 @@ async function connectWallet() {
         return;
       }
 
-      // 🧼 Clean message
+      // 🧼 Clean
       const cleanedMsg =
         normalizeMessage(msg);
 
       // 🚨 Block words
       for (const word of blockedWords) {
 
-        if (cleanedMsg.includes(word)) {
+        if (
+          cleanedMsg.includes(word)
+        ) {
 
           alert(
             "Restricted words detected"
@@ -426,7 +452,9 @@ async function connectWallet() {
       const now = Date.now();
 
       const lastPostTime =
-        localStorage.getItem("lastPostTime");
+        localStorage.getItem(
+          "lastPostTime"
+        );
 
       if (
         lastPostTime &&
@@ -443,7 +471,9 @@ async function connectWallet() {
       // 🚫 Duplicate prevention
       let recentPosts =
         JSON.parse(
-          localStorage.getItem("recentPosts")
+          localStorage.getItem(
+            "recentPosts"
+          )
         ) || [];
 
       if (
@@ -460,10 +490,15 @@ async function connectWallet() {
       try {
 
         const tx =
-          await contract.postConfession(msg, {
-            value:
-              ethers.utils.parseEther("0.00001")
-          });
+          await contract.postConfession(
+            msg,
+            {
+              value:
+                ethers.utils.parseEther(
+                  "0.00001"
+                )
+            }
+          );
 
         await tx.wait();
 
@@ -476,7 +511,9 @@ async function connectWallet() {
         // 💾 Save recent
         recentPosts.push(cleanedMsg);
 
-        if (recentPosts.length > 5) {
+        if (
+          recentPosts.length > 5
+        ) {
           recentPosts.shift();
         }
 
@@ -485,27 +522,34 @@ async function connectWallet() {
           JSON.stringify(recentPosts)
         );
 
-        document.getElementById("message").value = "";
+        document.getElementById(
+          "message"
+        ).value = "";
 
-        charCounter.innerText = "0 / 125";
-        charCounter.style.color = "#64748b";
+        charCounter.innerText =
+          "0 / 125";
+
+        charCounter.style.color =
+          "#64748b";
 
         await loadConfessions();
 
       } catch (err) {
 
         console.error(err);
+
         alert("Transaction failed");
       }
     }
 
-    // ⏱ Time formatter
+    // ⏱ Format time
     function formatTime(ts) {
 
       const now =
         Math.floor(Date.now() / 1000);
 
-      const diff = now - ts;
+      const diff =
+        now - ts;
 
       if (diff < 60)
         return "Just now";
@@ -532,24 +576,13 @@ async function connectWallet() {
             : " hours ago");
       }
 
-      if (diff < 2592000) {
+      const d =
+        Math.floor(diff / 86400);
 
-        const d =
-          Math.floor(diff / 86400);
-
-        return d +
-          (d === 1
-            ? " day ago"
-            : " days ago");
-      }
-
-      const y =
-        Math.floor(diff / 31536000);
-
-      return y +
-        (y === 1
-          ? " year ago"
-          : " years ago");
+      return d +
+        (d === 1
+          ? " day ago"
+          : " days ago");
     }
 
     // 🫧 Load confessions
@@ -561,13 +594,16 @@ async function connectWallet() {
           await readContract.getTotalConfessions();
 
         const list =
-          document.getElementById("confessionList");
+          document.getElementById(
+            "confessionList"
+          );
 
         list.innerHTML = "";
 
         const promises = [];
 
-        const randomIndexes = new Set();
+        const randomIndexes =
+          new Set();
 
         const batchSize =
           Math.min(50, total);
@@ -577,9 +613,13 @@ async function connectWallet() {
         ) {
 
           const randomIndex =
-            Math.floor(Math.random() * total);
+            Math.floor(
+              Math.random() * total
+            );
 
-          randomIndexes.add(randomIndex);
+          randomIndexes.add(
+            randomIndex
+          );
         }
 
         for (const i of randomIndexes) {
@@ -599,42 +639,52 @@ async function connectWallet() {
           const div =
             document.createElement("div");
 
-          // 🫧 Dynamic bubble size
-          const textLength = c[0].length;
+          // 🫧 Dynamic size
+          const textLength =
+            c[0].length;
 
           let size;
 
-          // short thoughts
           if (textLength < 40) {
 
             size =
-              Math.floor(Math.random() * 25) + 70;
-          }
+              Math.floor(
+                Math.random() * 25
+              ) + 70;
 
-          // medium thoughts
-          else if (textLength < 80) {
-
-            size =
-              Math.floor(Math.random() * 30) + 95;
-          }
-
-          // longer thoughts
-          else {
+          } else if (textLength < 80) {
 
             size =
-              Math.floor(Math.random() * 35) + 120;
+              Math.floor(
+                Math.random() * 30
+              ) + 95;
+
+          } else {
+
+            size =
+              Math.floor(
+                Math.random() * 35
+              ) + 120;
           }
 
-          div.style.width = size + "px";
-          div.style.height = size + "px";
+          div.style.width =
+            size + "px";
 
-          div.style.position = "absolute";
+          div.style.height =
+            size + "px";
+
+          div.style.position =
+            "absolute";
 
           const maxX =
-            window.innerWidth - size - 60;
+            window.innerWidth -
+            size -
+            60;
 
           const maxY =
-            window.innerHeight - size - 260;
+            window.innerHeight -
+            size -
+            260;
 
           let x, y;
           let overlapping;
@@ -643,20 +693,35 @@ async function connectWallet() {
 
             overlapping = false;
 
-            x = Math.random() * maxX;
-            y = Math.random() * (maxY - 120) + 120;
+            x =
+              Math.random() * maxX;
 
-            for (const bubble of placedBubbles) {
+            y =
+              Math.random() *
+              (maxY - 120) + 120;
 
-              const dx = bubble.x - x;
-              const dy = bubble.y - y;
+            for (
+              const bubble of placedBubbles
+            ) {
+
+              const dx =
+                bubble.x - x;
+
+              const dy =
+                bubble.y - y;
 
               const distance =
-                Math.sqrt(dx * dx + dy * dy);
+                Math.sqrt(
+                  dx * dx + dy * dy
+                );
 
               if (
                 distance <
-                (bubble.size / 2 + size / 2 + 25)
+                (
+                  bubble.size / 2 +
+                  size / 2 +
+                  25
+                )
               ) {
 
                 overlapping = true;
@@ -672,21 +737,33 @@ async function connectWallet() {
             size
           });
 
-          div.style.left = x + "px";
-          div.style.top = y + "px";
+          div.style.left =
+            x + "px";
+
+          div.style.top =
+            y + "px";
 
           // 🫧 Bubble style
-          div.style.borderRadius = "50%";
+          div.style.borderRadius =
+            "50%";
 
-          div.style.display = "flex";
-          div.style.alignItems = "center";
-          div.style.justifyContent = "center";
+          div.style.display =
+            "flex";
 
-          div.style.textAlign = "center";
+          div.style.alignItems =
+            "center";
 
-          div.style.cursor = "pointer";
+          div.style.justifyContent =
+            "center";
 
-          div.style.padding = "12px";
+          div.style.textAlign =
+            "center";
+
+          div.style.cursor =
+            "pointer";
+
+          div.style.padding =
+            "12px";
 
           div.style.background = `
             radial-gradient(
@@ -704,31 +781,33 @@ async function connectWallet() {
           div.style.border =
             "1.5px solid rgba(255,255,255,0.35)";
 
-          div.style.boxShadow =
-            `
+          div.style.boxShadow = `
             0 0 20px rgba(59,130,246,0.18),
             0 0 35px rgba(168,85,247,0.12),
             0 0 50px rgba(236,72,153,0.08)
-            `;
+          `;
 
-          div.style.transition = "0.3s";
+          div.style.transition =
+            "0.3s";
 
-          div.style.overflow = "hidden";
+          div.style.overflow =
+            "hidden";
 
-          // ✨ Floating
+          // ✨ Float
           div.style.animation =
             `floatBubble ${Math.random() * 4 + 4}s ease-in-out infinite`;
 
-          // 🫧 Empty bubble
           div.innerHTML = "";
 
           // ✨ Hover
           div.onmouseenter = () => {
-            div.style.transform = "scale(1.08)";
+            div.style.transform =
+              "scale(1.08)";
           };
 
           div.onmouseleave = () => {
-            div.style.transform = "scale(1)";
+            div.style.transform =
+              "scale(1)";
           };
 
           // 🔓 Reveal
@@ -753,7 +832,7 @@ async function connectWallet() {
                   <div style="
                     padding:10px;
                     color:#111827;
-                    animation: fadeIn 0.5s ease;
+                    animation:fadeIn 0.5s ease;
                   ">
                     <p style="
                       font-size:12px;
@@ -777,7 +856,7 @@ async function connectWallet() {
 
               }, 250);
 
-              // ⏳ Fade away
+              // ⏳ Fade
               setTimeout(() => {
 
                 if (revealed) {
@@ -785,23 +864,26 @@ async function connectWallet() {
                   div.style.transition =
                     "opacity 6s ease";
 
-                  div.style.opacity = "0";
+                  div.style.opacity =
+                    "0";
 
                   setTimeout(() => {
 
                     revealed = false;
 
-                    div.style.opacity = "1";
+                    div.style.opacity =
+                      "1";
 
-                    div.style.transition = "0.3s";
+                    div.style.transition =
+                      "0.3s";
 
                     div.innerHTML = "";
 
                   }, 6000);
-
                 }
 
               }, 35000);
+
             }
 
             // 🔒 Close
@@ -830,60 +912,11 @@ async function connectWallet() {
       }
     }
 
-    // 🔁 Auto connect
-    async function autoConnect() {
-
-      if (!window.ethereum)
-        return;
-
-      const accounts =
-        await window.ethereum.request({
-          method: "eth_accounts"
-        });
-
-      if (accounts.length > 0) {
-
-        provider =
-          new ethers.providers.Web3Provider(window.ethereum);
-
-        signer = provider.getSigner();
-
-        const network =
-          await provider.getNetwork();
-
-        if (network.chainId !== 8453)
-          return;
-
-        contract =
-          new ethers.Contract(
-            contractAddress,
-            abi,
-            signer
-          );
-      }
-    }
-
     // 🚀 Start
     window.onload = async () => {
 
       await loadConfessions();
-
-      await autoConnect();
     };
-
-    // 🔁 Wallet events
-    if (window.ethereum) {
-
-      window.ethereum.on(
-        "accountsChanged",
-        autoConnect
-      );
-
-      window.ethereum.on(
-        "chainChanged",
-        () => window.location.reload()
-      );
-    }
 
   </script>
 
