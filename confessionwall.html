@@ -28,7 +28,7 @@
       overflow: hidden;
     }
 
-    /* 🫧 Floating movement */
+    /* 🫧 Floating animation */
     @keyframes floatBubble {
 
       0% {
@@ -107,45 +107,20 @@
 
   <h2>🕵️ Anonymous Confession Wall</h2>
 
-  <div style="
-  display:flex;
-  gap:8px;
-  align-items:center;
-  margin-bottom:10px;
-">
-
-    <button
-      onclick="connectWallet()"
-      style="
-        padding:10px 14px;
-        border:none;
-        border-radius:10px;
-        cursor:pointer;
-        background:#111827;
-        color:white;
-        font-weight:bold;
-      "
-    >
-      Connect Wallet
-    </button>
-
-    <button
-      onclick="connectBaseWallet()"
-      style="
-        padding:10px 14px;
-        border:none;
-        border-radius:10px;
-        cursor:pointer;
-        background:#111827;
-        border:1px solid #0052ff;
-        color:white;
-        font-weight:bold;
-      "
-    >
-      Base Wallet
-    </button>
-
-  </div>
+  <button
+    onclick="connectWallet()"
+    style="
+      padding:10px 14px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      background:#111827;
+      color:white;
+      font-weight:bold;
+    "
+  >
+    Connect Wallet
+  </button>
 
   <br><br>
 
@@ -227,82 +202,79 @@
 
         const providerOptions = {
 
-  // 🦊 MetaMask auto detected
+          // 🔵 Base Wallet
+          coinbasewalletsdk: {
 
-  // 🔵 Base Wallet
-  coinbasewalletsdk: {
+            package:
+              window.CoinbaseWalletSDK,
 
-    package:
-      window.CoinbaseWalletSDK,
+            display: {
 
-    display: {
+              logo:
+                "https://avatars.githubusercontent.com/u/1885080?s=280&v=4",
 
-      logo:
-        "https://avatars.githubusercontent.com/u/1885080?s=280&v=4",
+              name:
+                "Base Wallet",
 
-      name:
-        "Base Wallet",
+              description:
+                "Connect with Base Wallet"
+            },
 
-      description:
-        "Connect with Base Wallet"
-    },
+            options: {
 
-    options: {
+              appName:
+                "Anonymous Confession Wall",
 
-      appName:
-        "Anonymous Confession Wall",
+              rpc:
+                "https://mainnet.base.org",
 
-      rpc:
-        "https://mainnet.base.org",
+              chainId: 8453,
 
-      chainId: 8453,
+              darkMode: true
+            }
+          },
 
-      darkMode: true
-    }
-  },
+          // ⚫ OKX Wallet
+          okxwallet: {
 
-  // ⚫ OKX Wallet
-  okxwallet: {
+            display: {
 
-    package: true,
+              logo:
+                "https://static.okx.com/cdn/assets/imgs/247/58E63FEA47A2B7D7.png",
 
-    display: {
+              name:
+                "OKX Wallet",
 
-      logo:
-        "https://static.okx.com/cdn/assets/imgs/247/58E63FEA47A2B7D7.png",
+              description:
+                "Connect with OKX Wallet"
+            },
 
-      name:
-        "OKX Wallet",
+            connector: async () => {
 
-      description:
-        "Connect with OKX Wallet"
-    },
+              if (!window.okxwallet) {
 
-    connector: async () => {
+                window.open(
+                  "https://www.okx.com/web3",
+                  "_blank"
+                );
 
-      if (!window.okxwallet) {
+                throw new Error(
+                  "OKX Wallet not installed"
+                );
+              }
 
-        window.open(
-          "https://www.okx.com/web3",
-          "_blank"
-        );
+              const provider =
+                window.okxwallet;
 
-        throw new Error(
-          "OKX Wallet not installed"
-        );
-      }
+              await provider.request({
+                method: "eth_requestAccounts"
+              });
 
-      const provider =
-        window.okxwallet;
+              return provider;
+            }
+          }
+        };
 
-      await provider.request({
-        method: "eth_requestAccounts"
-      });
-
-      return provider;
-    }
-  }
-};
         const web3Modal =
           new window.Web3Modal.default({
 
@@ -310,9 +282,12 @@
 
             providerOptions,
 
-            theme: "dark"
+            theme: "dark",
+
+            disableInjectedProvider: false
           });
 
+        // 🪄 Open popup
         const connection =
           await web3Modal.connect();
 
@@ -356,55 +331,6 @@
       } finally {
 
         connectingWallet = false;
-      }
-    }
-
-    // 🔵 Connect Base Wallet directly
-    async function connectBaseWallet() {
-
-      try {
-
-        const coinbaseWallet =
-          new window.CoinbaseWalletSDK({
-
-            appName:
-              "Anonymous Confession Wall",
-
-            darkMode: true
-          });
-
-        const ethereum =
-          coinbaseWallet.makeWeb3Provider(
-            "https://mainnet.base.org",
-            8453
-          );
-
-        await ethereum.enable();
-
-        provider =
-          new ethers.providers.Web3Provider(
-            ethereum
-          );
-
-        signer =
-          provider.getSigner();
-
-        contract =
-          new ethers.Contract(
-            contractAddress,
-            abi,
-            signer
-          );
-
-        alert("Base Wallet Connected ✅");
-
-      } catch (err) {
-
-        console.error(err);
-
-        alert(
-          "Base Wallet connection failed"
-        );
       }
     }
 
@@ -482,22 +408,17 @@
       charCounter.innerText =
         `${length} / 125`;
 
-      // ⚪ normal
       if (length < 100) {
 
         charCounter.style.color =
           "#64748b";
-      }
 
-      // 🟡 warning
-      else if (length < 125) {
+      } else if (length < 125) {
 
         charCounter.style.color =
           "#eab308";
-      }
 
-      // 🔴 limit
-      else {
+      } else {
 
         charCounter.style.color =
           "#ef4444";
@@ -610,13 +531,11 @@
 
         await tx.wait();
 
-        // 💾 Save cooldown
         localStorage.setItem(
           "lastPostTime",
           now
         );
 
-        // 💾 Save recent
         recentPosts.push(cleanedMsg);
 
         if (
@@ -992,10 +911,7 @@
 
               }, 35000);
 
-            }
-
-            // 🔒 Close
-            else {
+            } else {
 
               div.style.animation =
                 "burstBubble 0.35s ease";
