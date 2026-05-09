@@ -153,123 +153,117 @@
   <!-- ✅ ETHERS -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
-  <!-- ✅ MODERN WALLET POPUP -->
-  <script type="module">
+  <!-- ✅ Web3Modal -->
+<script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
 
-    import {
-      EthereumClient,
-      w3mConnectors,
-      w3mProvider
-    } from 'https://unpkg.com/@web3modal/ethereum@2.7.1/dist/index.js'
+<!-- ✅ WalletConnect -->
+<script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider/dist/umd/index.min.js"></script>
 
-    import {
-      Web3Modal
-    } from 'https://unpkg.com/@web3modal/html@2.7.1/dist/index.js'
+<!-- ✅ Coinbase Wallet -->
+<script src="https://cdn.jsdelivr.net/npm/@coinbase/wallet-sdk/dist/CoinbaseWalletSDK.umd.min.js"></script>
 
-    import {
-      configureChains,
-      createConfig
-    } from 'https://esm.sh/wagmi'
+<script>
 
-    import {
-      mainnet,
-      base
-    } from 'https://esm.sh/wagmi/chains'
+  let provider
+  let signer
+  let contract
 
-    const projectId =
-      '24a3a3aaa955599c699d8dcd73aa065a'
+  async function connectWallet() {
 
-    const chains = [
-      mainnet,
-      base
-    ]
+    try {
 
-    const { publicClient } =
-      configureChains(chains, [
-        w3mProvider({ projectId })
-      ])
+      const providerOptions = {
 
-    const wagmiConfig =
-      createConfig({
+        walletconnect: {
 
-        autoConnect: true,
+          package:
+            window.WalletConnectProvider.default,
 
-        connectors:
-          w3mConnectors({
-            projectId,
-            chains
-          }),
+          options: {
 
-        publicClient
-      })
+            rpc: {
+              8453:
+                "https://mainnet.base.org"
+            },
 
-    const ethereumClient =
-      new EthereumClient(
-        wagmiConfig,
-        chains
-      )
-
-    const modal =
-      new Web3Modal(
-        {
-          projectId,
-          themeMode: 'dark'
-        },
-        ethereumClient
-      )
-
-    window.connectWallet =
-      async () => {
-
-        try {
-
-          await modal.openModal()
-
-          const walletProvider =
-            await modal.getWalletProvider()
-
-          if (!walletProvider) return
-
-          window.provider =
-            new ethers.providers.Web3Provider(
-              walletProvider
-            )
-
-          window.signer =
-            window.provider.getSigner()
-
-          const network =
-            await window.provider.getNetwork()
-
-          // 🔄 Switch Base Network
-          if (network.chainId !== 8453) {
-
-            await window.provider.send(
-              'wallet_switchEthereumChain',
-              [{ chainId: '0x2105' }]
-            )
+            chainId: 8453
           }
+        },
 
-          window.contract =
-            new ethers.Contract(
-              window.contractAddress,
-              window.abi,
-              window.signer
-            )
+        coinbasewallet: {
 
-          alert('Wallet Connected ✅')
+          package:
+            window.CoinbaseWalletSDK,
 
-        } catch(err) {
+          options: {
 
-          console.error(err)
+            appName:
+              "Anonymous Confession Wall",
 
-          alert(
-            'Wallet connection failed'
-          )
+            rpc:
+              "https://mainnet.base.org",
+
+            chainId: 8453,
+
+            darkMode: true
+          }
         }
       }
 
-  </script>
+      const web3Modal =
+        new window.Web3Modal.default({
+
+          cacheProvider: false,
+
+          providerOptions,
+
+          theme: "dark"
+        })
+
+      const connection =
+        await web3Modal.connect()
+
+      provider =
+        new ethers.providers.Web3Provider(
+          connection
+        )
+
+      signer =
+        provider.getSigner()
+
+      const network =
+        await provider.getNetwork()
+
+      if (network.chainId !== 8453) {
+
+        await provider.send(
+          "wallet_switchEthereumChain",
+          [{ chainId: "0x2105" }]
+        )
+      }
+
+      contract =
+        new ethers.Contract(
+          window.contractAddress,
+          window.abi,
+          signer
+        )
+
+      window.contract = contract
+
+      alert("Wallet Connected ✅")
+
+    } catch(err) {
+
+      console.error(err)
+
+      alert(
+        "Wallet connection failed"
+      )
+    }
+  }
+
+</script>
 
   <!-- ✅ MAIN WEBSITE LOGIC -->
   <script>
